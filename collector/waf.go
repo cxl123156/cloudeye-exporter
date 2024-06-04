@@ -4,12 +4,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	waf "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/waf/v1"
 	wafModel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/waf/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var wafInfo serversInfo
@@ -62,7 +63,7 @@ func (getter WAFInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		wafInfo.LabelInfo = resourceInfos
 		wafInfo.FilterMetrics = filterMetrics
-		wafInfo.TTL = time.Now().Add(TTL).Unix()
+		wafInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return wafInfo.LabelInfo, wafInfo.FilterMetrics
 }

@@ -3,9 +3,10 @@ package collector
 import (
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	rmsModel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rms/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 type GaussdbNodeInfo struct {
@@ -54,14 +55,14 @@ func (getter GAUSSDBInfo) GetResourceInfo() (map[string]labelInfo, []model.Metri
 
 		gaussdbInfo.LabelInfo = resourceInfos
 		gaussdbInfo.FilterMetrics = filterMetrics
-		gaussdbInfo.TTL = time.Now().Add(TTL).Unix()
+		gaussdbInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return gaussdbInfo.LabelInfo, gaussdbInfo.FilterMetrics
 }
 
 func getAllGaussdbNodesFromRMS() ([]GaussdbNodeInfo, error) {
-	resp, err := listResources("gaussdb", "nodes")
-	instanceResp, err := listResources("gaussdb", "instance")
+	resp, err := listResources("gaussdbformysql", "nodes")
+	instanceResp, err := listResources("gaussdbformysql", "instance")
 
 	instanceMap := make(map[string]rmsModel.ResourceEntity)
 	for _, entity := range instanceResp {

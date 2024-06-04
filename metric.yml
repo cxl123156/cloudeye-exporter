@@ -1067,6 +1067,15 @@ SYS.DLI:
       - flink_mem_usage
       - flink_max_op_latency
       - flink_max_op_backpressure_level
+    elastic_resource_pool_id:
+      - elastic_resource_pool_cpu_usage
+      - elastic_resource_pool_mem_usage
+      - elastic_resource_pool_disk_usage
+      - elastic_resource_pool_disk_max_usage
+      - elastic_resource_pool_cu_num
+      - elastic_resource_pool_alloc_cu_num
+      - elastic_resource_pool_min_cu_num
+      - elastic_resource_pool_max_cu_num
 SYS.SFS:
   dim_metric_name:
     share_id:

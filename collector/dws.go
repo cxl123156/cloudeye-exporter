@@ -1,7 +1,6 @@
 package collector
 
 import (
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"time"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
@@ -9,6 +8,8 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	dws "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dws/v2"
 	dwsmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dws/v2/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var dwsInfo serversInfo
@@ -45,7 +46,7 @@ func (getter DWSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 		}
 		dwsInfo.LabelInfo = resourceInfos
 		dwsInfo.FilterMetrics = filterMetrics
-		dwsInfo.TTL = time.Now().Add(TTL).Unix()
+		dwsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return dwsInfo.LabelInfo, dwsInfo.FilterMetrics
 }

@@ -2,7 +2,9 @@ package collector
 
 import (
 	"errors"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/agiledragon/gomonkey/v2"
@@ -109,6 +111,64 @@ func TestInitEndpointConfig(t *testing.T) {
 			defer patches.Reset()
 			initEndpointConfig()
 			testCase.expect(t)
+		})
+	}
+}
+
+func TestSetDefaultConfigValues(t *testing.T) {
+	config := &CloudConfig{}
+	SetDefaultConfigValues(config)
+	assert.NotEqual(t, 0, config.Global.ResourceSyncIntervalMinutes)
+}
+
+func TestInitCloudConf(t *testing.T) {
+	testCases := []struct {
+		name    string
+		patches func() *gomonkey.Patches
+		expect  func(t *testing.T, err error)
+	}{
+		{
+			"NormalizeGetAbsolutePathError",
+			func() *gomonkey.Patches {
+				patches := gomonkey.NewPatches()
+				patches.ApplyFuncReturn(filepath.Abs, "", errors.New("get absolute path error"))
+				return patches
+			},
+			func(t *testing.T, err error) {
+				assert.NotNil(t, err)
+			},
+		},
+		{
+			"PathPatternError",
+			func() *gomonkey.Patches {
+				patches := gomonkey.NewPatches()
+				patches.ApplyFuncReturn(filepath.Abs, "/usr/local/\n/cloudeye-exporter/clouds.conf", nil)
+				return patches
+			},
+			func(t *testing.T, err error) {
+				assert.NotNil(t, err)
+			},
+		},
+		{
+			"NormalizeSuccessReadError",
+			func() *gomonkey.Patches {
+				patches := gomonkey.NewPatches()
+				patches.ApplyFuncReturn(filepath.Abs, "/usr/local/cloudeye-exporter/clouds.conf", nil)
+				patches.ApplyFuncReturn(ioutil.ReadFile, nil, errors.New("read file content error"))
+				return patches
+			},
+			func(t *testing.T, err error) {
+				assert.NotNil(t, err)
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			patches := testCase.patches()
+			defer patches.Reset()
+			err := InitCloudConf("/usr/local/cloudeye-exporter/clouds.conf")
+			testCase.expect(t, err)
 		})
 	}
 }

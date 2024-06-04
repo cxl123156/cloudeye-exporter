@@ -3,8 +3,9 @@ package collector
 import (
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 type EfsInstanceInfo struct {
@@ -48,7 +49,7 @@ func (getter EFSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		efsInfo.LabelInfo = resourceInfos
 		efsInfo.FilterMetrics = filterMetrics
-		efsInfo.TTL = time.Now().Add(TTL).Unix()
+		efsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return efsInfo.LabelInfo, efsInfo.FilterMetrics
 }

@@ -4,8 +4,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var sfsInfo serversInfo
@@ -41,7 +42,7 @@ func (getter SFSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		sfsInfo.LabelInfo = resourceInfos
 		sfsInfo.FilterMetrics = filterMetrics
-		sfsInfo.TTL = time.Now().Add(TTL).Unix()
+		sfsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return sfsInfo.LabelInfo, sfsInfo.FilterMetrics
 }

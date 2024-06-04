@@ -64,7 +64,7 @@ func (getter RDSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		rdsInfo.LabelInfo = resourceInfos
 		rdsInfo.FilterMetrics = filterMetrics
-		rdsInfo.TTL = time.Now().Add(TTL).Unix()
+		rdsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return rdsInfo.LabelInfo, rdsInfo.FilterMetrics
 }

@@ -3,8 +3,9 @@ package collector
 import (
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var vpcEPInfo serversInfo
@@ -39,7 +40,7 @@ func (getter VPCEPInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metr
 		}
 		vpcEPInfo.LabelInfo = resourceInfos
 		vpcEPInfo.FilterMetrics = filterMetrics
-		vpcEPInfo.TTL = time.Now().Add(TTL).Unix()
+		vpcEPInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return vpcEPInfo.LabelInfo, vpcEPInfo.FilterMetrics
 }

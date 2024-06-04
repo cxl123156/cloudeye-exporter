@@ -37,7 +37,7 @@ func (getter DCSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		dcsInfo.LabelInfo = resourceInfos
 		dcsInfo.FilterMetrics = filterMetrics
-		dcsInfo.TTL = time.Now().Add(TTL).Unix()
+		dcsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return dcsInfo.LabelInfo, dcsInfo.FilterMetrics
 }

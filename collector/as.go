@@ -34,7 +34,7 @@ func (getter ASInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.MetricI
 		}
 		asInfo.LabelInfo = resourceInfos
 		asInfo.FilterMetrics = filterMetrics
-		asInfo.TTL = time.Now().Add(TTL).Unix()
+		asInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return asInfo.LabelInfo, asInfo.FilterMetrics
 }

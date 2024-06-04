@@ -50,7 +50,7 @@ func (getter VPCInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		vpcInfo.LabelInfo = resourceInfos
 		vpcInfo.FilterMetrics = filterMetrics
-		vpcInfo.TTL = time.Now().Add(TTL).Unix()
+		vpcInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return vpcInfo.LabelInfo, vpcInfo.FilterMetrics
 }

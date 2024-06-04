@@ -4,6 +4,9 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
+	"regexp"
+	"strings"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
@@ -27,12 +30,14 @@ type CloudAuth struct {
 }
 
 type Global struct {
-	Port            string `yaml:"port"`
-	Prefix          string `yaml:"prefix"`
-	MetricPath      string `yaml:"metric_path"`
-	EpsInfoPath     string `yaml:"eps_path"`
-	MaxRoutines     int    `yaml:"max_routines"`
-	ScrapeBatchSize int    `yaml:"scrape_batch_size"`
+	Port                        string `yaml:"port"`
+	Prefix                      string `yaml:"prefix"`
+	MetricPath                  string `yaml:"metric_path"`
+	EpsInfoPath                 string `yaml:"eps_path"`
+	MaxRoutines                 int    `yaml:"max_routines"`
+	ScrapeBatchSize             int    `yaml:"scrape_batch_size"`
+	ResourceSyncIntervalMinutes int    `yaml:"resource_sync_interval_minutes"`
+	EpIds                       string `yaml:"ep_ids"`
 }
 
 type CloudConfig struct {
@@ -46,7 +51,12 @@ var TmpAK string
 var TmpSK string
 
 func InitCloudConf(file string) error {
-	data, err := ioutil.ReadFile(file)
+	realPath, err := NormalizePath(file)
+	if err != nil {
+		return err
+	}
+
+	data, err := ioutil.ReadFile(realPath)
 	if err != nil {
 		return err
 	}
@@ -65,6 +75,19 @@ func InitCloudConf(file string) error {
 
 	initEndpointConfig()
 	return err
+}
+
+func NormalizePath(path string) (string, error) {
+	relPath, err := filepath.Abs(path) // 对文件路径进行标准化
+	if err != nil {
+		return "", err
+	}
+	relPath = strings.Replace(relPath, "\\", "/", -1)
+	match, err := regexp.MatchString("[!;<>&|$\n`\\\\]", relPath)
+	if match || err != nil {
+		return "", errors.New("match path error")
+	}
+	return relPath, nil
 }
 
 func SetDefaultConfigValues(config *CloudConfig) {
@@ -90,6 +113,10 @@ func SetDefaultConfigValues(config *CloudConfig) {
 
 	if config.Global.ScrapeBatchSize == 0 {
 		config.Global.ScrapeBatchSize = 300
+	}
+
+	if config.Global.ResourceSyncIntervalMinutes <= 0 {
+		config.Global.ResourceSyncIntervalMinutes = 180
 	}
 }
 

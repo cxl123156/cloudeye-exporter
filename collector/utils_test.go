@@ -2,6 +2,7 @@ package collector
 
 import (
 	"testing"
+	"time"
 
 	"github.com/agiledragon/gomonkey/v2"
 	cbrmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cbr/v1/model"
@@ -264,4 +265,14 @@ func TestGenDefaultReqDefWithOffsetAndLimit(t *testing.T) {
 func TestGetHcClient(t *testing.T) {
 	client := getHcClient("ces.test.huawei.com")
 	assert.Equal(t, true, client != nil)
+}
+
+func TestGetResourceInfoExpirationTime(t *testing.T) {
+	CloudConf.Global.ResourceSyncIntervalMinutes = 180
+	expirationTime := GetResourceInfoExpirationTime()
+	assert.Equal(t, 180*time.Minute, expirationTime)
+
+	CloudConf.Global.ResourceSyncIntervalMinutes = 5
+	expirationTime = GetResourceInfoExpirationTime()
+	assert.Equal(t, 10*time.Minute, expirationTime)
 }

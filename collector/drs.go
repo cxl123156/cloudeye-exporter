@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	rmsmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rms/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 type DrsInstanceInfo struct {
@@ -50,7 +51,7 @@ func (getter DRSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		drsInfo.LabelInfo = resourceInfos
 		drsInfo.FilterMetrics = filterMetrics
-		drsInfo.TTL = time.Now().Add(TTL).Unix()
+		drsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return drsInfo.LabelInfo, drsInfo.FilterMetrics
 }

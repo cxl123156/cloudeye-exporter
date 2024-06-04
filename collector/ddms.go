@@ -52,7 +52,7 @@ func (getter DDMSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricIn
 		}
 		ddmsInfo.LabelInfo = resourceInfos
 		ddmsInfo.FilterMetrics = filterMetrics
-		ddmsInfo.TTL = time.Now().Add(TTL).Unix()
+		ddmsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return ddmsInfo.LabelInfo, ddmsInfo.FilterMetrics
 }

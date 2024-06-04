@@ -78,7 +78,7 @@ func (getter EVSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		evsInfo.LabelInfo = resourceInfos
 		evsInfo.FilterMetrics = allMetrics
-		evsInfo.TTL = time.Now().Add(TTL).Unix()
+		evsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return evsInfo.LabelInfo, evsInfo.FilterMetrics
 }

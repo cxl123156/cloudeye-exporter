@@ -44,7 +44,7 @@ func (getter DBSSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricIn
 
 		dbssInfo.LabelInfo = resourceInfos
 		dbssInfo.FilterMetrics = filterMetrics
-		dbssInfo.TTL = time.Now().Add(TTL).Unix()
+		dbssInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return dbssInfo.LabelInfo, dbssInfo.FilterMetrics
 }

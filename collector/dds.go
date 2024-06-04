@@ -3,12 +3,13 @@ package collector
 import (
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	dds "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dds/v3"
 	ddsmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dds/v3/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 type DdsInstanceInfo struct {
@@ -71,7 +72,7 @@ func (getter DDSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 		}
 		ddsInfo.LabelInfo = resourceInfos
 		ddsInfo.FilterMetrics = filterMetrics
-		ddsInfo.TTL = time.Now().Add(TTL).Unix()
+		ddsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return ddsInfo.LabelInfo, ddsInfo.FilterMetrics
 }

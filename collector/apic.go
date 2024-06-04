@@ -4,12 +4,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	apig "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/apig/v2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/apig/v2/model"
 	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var apicInfo serversInfo
@@ -46,7 +47,7 @@ func (getter APICInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metri
 		}
 		apicInfo.LabelInfo = resourceInfos
 		apicInfo.FilterMetrics = filterMetrics
-		apicInfo.TTL = time.Now().Add(TTL).Unix()
+		apicInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return apicInfo.LabelInfo, apicInfo.FilterMetrics
 }

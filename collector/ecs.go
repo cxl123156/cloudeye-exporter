@@ -57,7 +57,7 @@ func (getter ECSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		ecsInfo.LabelInfo = resourceInfos
 		ecsInfo.FilterMetrics = filterMetrics
-		ecsInfo.TTL = time.Now().Add(TTL).Unix()
+		ecsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return ecsInfo.LabelInfo, ecsInfo.FilterMetrics
 }
@@ -164,7 +164,7 @@ func (getter AGTECSInfo) GetResourceInfo() (map[string]labelInfo, []model.Metric
 	if agtEcsInfo.LabelInfo == nil {
 		agtEcsInfo.FilterMetrics = getECSAGTMetrics()
 		agtEcsInfo.LabelInfo = ecsInfo.LabelInfo
-		agtEcsInfo.TTL = time.Now().Add(TTL).Unix()
+		agtEcsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	if time.Now().Unix() > agtEcsInfo.TTL {
 		go func() {
@@ -173,7 +173,7 @@ func (getter AGTECSInfo) GetResourceInfo() (map[string]labelInfo, []model.Metric
 			defer agtEcsInfo.Unlock()
 			agtEcsInfo.FilterMetrics = metrics
 			agtEcsInfo.LabelInfo = ecsInfo.LabelInfo
-			agtEcsInfo.TTL = time.Now().Add(TTL).Unix()
+			agtEcsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 		}()
 	}
 	return agtEcsInfo.LabelInfo, agtEcsInfo.FilterMetrics

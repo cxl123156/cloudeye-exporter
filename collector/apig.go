@@ -45,7 +45,7 @@ func (getter APIGInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricIn
 		}
 		apigInfo.LabelInfo = resourceInfos
 		apigInfo.FilterMetrics = filterMetrics
-		apigInfo.TTL = time.Now().Add(TTL).Unix()
+		apigInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return apigInfo.LabelInfo, apigInfo.FilterMetrics
 }

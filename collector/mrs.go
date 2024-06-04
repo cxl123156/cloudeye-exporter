@@ -23,7 +23,7 @@ func (getter MRSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 	defer mrsInfo.Unlock()
 	if mrsInfo.LabelInfo == nil {
 		mrsInfo.LabelInfo, mrsInfo.FilterMetrics = getMRSResourceAndMetrics()
-		mrsInfo.TTL = time.Now().Add(TTL).Unix()
+		mrsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	if time.Now().Unix() > mrsInfo.TTL {
 		go func() {
@@ -32,7 +32,7 @@ func (getter MRSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 			defer mrsInfo.Unlock()
 			mrsInfo.LabelInfo = label
 			mrsInfo.FilterMetrics = metrics
-			mrsInfo.TTL = time.Now().Add(TTL).Unix()
+			mrsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 		}()
 	}
 	return mrsInfo.LabelInfo, mrsInfo.FilterMetrics

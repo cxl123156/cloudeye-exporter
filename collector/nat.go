@@ -34,7 +34,7 @@ func (getter NATInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metric
 		}
 		natInfo.LabelInfo = resourceInfos
 		natInfo.FilterMetrics = filterMetrics
-		natInfo.TTL = time.Now().Add(TTL).Unix()
+		natInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return natInfo.LabelInfo, natInfo.FilterMetrics
 }

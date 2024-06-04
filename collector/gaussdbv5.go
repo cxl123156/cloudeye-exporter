@@ -68,7 +68,7 @@ func (getter GAUSSDBV5Info) GetResourceInfo() (map[string]labelInfo, []cesmodel.
 		}
 		gaussdbV5Info.LabelInfo = resourceInfos
 		gaussdbV5Info.FilterMetrics = filterMetrics
-		gaussdbV5Info.TTL = time.Now().Add(TTL).Unix()
+		gaussdbV5Info.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return gaussdbV5Info.LabelInfo, gaussdbV5Info.FilterMetrics
 }

@@ -3,12 +3,13 @@ package collector
 import (
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	cbr "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cbr/v1"
 	cbrmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cbr/v1/model"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var cbrInfo serversInfo
@@ -51,7 +52,7 @@ func (getter CBRInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		cbrInfo.LabelInfo = resourceInfos
 		cbrInfo.FilterMetrics = filterMetrics
-		cbrInfo.TTL = time.Now().Add(TTL).Unix()
+		cbrInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return cbrInfo.LabelInfo, cbrInfo.FilterMetrics
 }

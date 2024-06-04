@@ -45,7 +45,7 @@ func (cfw CFWInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.MetricInf
 			metrics := buildSingleDimensionMetrics(metricNames, "SYS.CFW", "fw_instance_id", server.ID)
 			filterMetrics = append(filterMetrics, metrics...)
 			info := labelInfo{
-				Name:  []string{"name", "ep_id"},
+				Name:  []string{"name", "epId"},
 				Value: []string{server.Name, server.EpId},
 			}
 			keys, values := getTags(server.Tags)
@@ -56,7 +56,7 @@ func (cfw CFWInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.MetricInf
 
 		cfwServerInfo.LabelInfo = resourceInfos
 		cfwServerInfo.FilterMetrics = filterMetrics
-		cfwServerInfo.TTL = time.Now().Add(TTL).Unix()
+		cfwServerInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return cfwServerInfo.LabelInfo, cfwServerInfo.FilterMetrics
 }

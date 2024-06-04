@@ -121,7 +121,7 @@ func (getter ELBInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metric
 
 		elbInfo.LabelInfo = resourceInfos
 		elbInfo.FilterMetrics = filterMetrics
-		elbInfo.TTL = time.Now().Add(TTL).Unix()
+		elbInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return elbInfo.LabelInfo, elbInfo.FilterMetrics
 }

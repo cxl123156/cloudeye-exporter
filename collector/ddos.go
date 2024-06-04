@@ -40,7 +40,7 @@ func (getter DDOSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricIn
 		}
 		ddosInfo.LabelInfo = resourceInfos
 		ddosInfo.FilterMetrics = filterMetrics
-		ddosInfo.TTL = time.Now().Add(TTL).Unix()
+		ddosInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return ddosInfo.LabelInfo, ddosInfo.FilterMetrics
 }

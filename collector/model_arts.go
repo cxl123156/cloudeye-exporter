@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/def"
 	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var modelArtsInfo serversInfo
@@ -61,7 +62,7 @@ func (getter ModelArtsInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.
 		}
 		modelArtsInfo.LabelInfo = resourceInfos
 		modelArtsInfo.FilterMetrics = filterMetrics
-		modelArtsInfo.TTL = time.Now().Add(TTL).Unix()
+		modelArtsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return modelArtsInfo.LabelInfo, modelArtsInfo.FilterMetrics
 }

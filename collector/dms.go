@@ -3,13 +3,8 @@ package collector
 import (
 	"time"
 
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
-	rocketmq "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rocketmq/v2"
-	rocketmqmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rocketmq/v2/model"
-
 	"github.com/huaweicloud/cloudeye-exporter/logs"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 )
 
 type DmsInstanceInfo struct {
@@ -26,7 +21,7 @@ func (getter DMSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 	defer dmsInfo.Unlock()
 	if dmsInfo.LabelInfo == nil {
 		dmsInfo.LabelInfo, dmsInfo.FilterMetrics = getDMSResourceAndMetrics()
-		dmsInfo.TTL = time.Now().Add(TTL).Unix()
+		dmsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	if time.Now().Unix() > dmsInfo.TTL {
 		go func() {
@@ -35,7 +30,7 @@ func (getter DMSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 			defer dmsInfo.Unlock()
 			dmsInfo.LabelInfo = label
 			dmsInfo.FilterMetrics = metrics
-			dmsInfo.TTL = time.Now().Add(TTL).Unix()
+			dmsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 		}()
 	}
 	return dmsInfo.LabelInfo, dmsInfo.FilterMetrics
@@ -85,28 +80,4 @@ func getDMSInstanceFromRMS() []ResourceBaseInfo {
 	}
 
 	return instances
-}
-
-func getRocketMQInstances() ([]ResourceBaseInfo, error) {
-	request := &rocketmqmodel.ListInstancesRequest{}
-	response, err := getRocketMQClient().ListInstances(request)
-	if err != nil {
-		logs.Logger.Errorf("Get all RocketMQ instances : %s", err.Error())
-		return nil, err
-	}
-
-	instances := make([]ResourceBaseInfo, len(*response.Instances))
-	for index, instance := range *response.Instances {
-		instances[index].ID = *instance.InstanceId
-		instances[index].Name = *instance.Name
-		instances[index].Tags = fmtTags(instance.Tags)
-	}
-	return instances, nil
-}
-
-func getRocketMQClient() *rocketmq.RocketMQClient {
-	return rocketmq.NewRocketMQClient(rocketmq.RocketMQClientBuilder().WithCredential(
-		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
-		WithEndpoint(getEndpoint("dms", "v2")).Build())
 }

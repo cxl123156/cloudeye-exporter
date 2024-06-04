@@ -64,14 +64,14 @@ global:
   port: ":8087"
   metric_path: "/metrics"
   scrape_batch_size: 300
-
+  resource_sync_interval_minutes: 20 # Update frequency of resource information: resource information is updated every 180 minutes by default; If this parameter is set to a value less than 10 minutes, the information is updated every 10 minutes.
+  ep_ids: "xxx1,xxx2" # This is optional. Filter resources by enterpries project, cloudeye-exporter will get all resources when this is empty, if you need multiple enterprise project, use comma split them.
 auth:
   auth_url: "https://iam.{region_id}.myhuaweicloud.com/v3"
   project_name: "{project_name}"
   access_key: "{access_key}"
   secret_key: "{secret_key}"
   region: "{region}"
-
 ```
 
 ## Example of endpoint file(endpoints.yml)

@@ -3,8 +3,9 @@ package collector
 import (
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var bmsInfo serversInfo
@@ -40,7 +41,7 @@ func (getter BMSInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metric
 		}
 		bmsInfo.LabelInfo = resourceInfos
 		bmsInfo.FilterMetrics = filterMetrics
-		bmsInfo.TTL = time.Now().Add(TTL).Unix()
+		bmsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return bmsInfo.LabelInfo, bmsInfo.FilterMetrics
 }

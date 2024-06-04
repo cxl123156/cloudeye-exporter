@@ -52,7 +52,7 @@ func (getter GESInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 
 		gesInfo.LabelInfo = resourceInfos
 		gesInfo.FilterMetrics = filterMetrics
-		gesInfo.TTL = time.Now().Add(TTL).Unix()
+		gesInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return gesInfo.LabelInfo, gesInfo.FilterMetrics
 }

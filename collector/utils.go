@@ -20,7 +20,7 @@ import (
 	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
-const TTL = time.Hour * 3
+const MinimumResourceInfoSyncInterval = 10
 
 var tagRegexp *regexp.Regexp
 
@@ -250,4 +250,12 @@ func getResourcesBaseInfoFromRMS(provider, resourceType string) ([]ResourceBaseI
 		services[index].Tags = resource.Tags
 	}
 	return services, nil
+}
+
+func GetResourceInfoExpirationTime() time.Duration {
+	intervalMinutes := CloudConf.Global.ResourceSyncIntervalMinutes
+	if intervalMinutes <= MinimumResourceInfoSyncInterval {
+		return MinimumResourceInfoSyncInterval * time.Minute
+	}
+	return time.Duration(intervalMinutes) * time.Minute
 }

@@ -46,7 +46,7 @@ func (getter FunctionGraphInfo) GetResourceInfo() (map[string]labelInfo, []cesmo
 		}
 		functionGraphInfo.LabelInfo = resourceInfos
 		functionGraphInfo.FilterMetrics = filterMetrics
-		functionGraphInfo.TTL = time.Now().Add(TTL).Unix()
+		functionGraphInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return functionGraphInfo.LabelInfo, functionGraphInfo.FilterMetrics
 }

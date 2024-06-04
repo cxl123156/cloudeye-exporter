@@ -45,7 +45,7 @@ func GetEPSInfo() (string, error) {
 		return result, err
 	}
 	for _, detail := range epsInfo {
-		result += fmt.Sprintf("huaweicloud_epinfo{epId=\"%s\",epName=\"%s\"} 1\n", detail.Id, detail.Name)
+		result += fmt.Sprintf("%s_epinfo{epId=\"%s\",epName=\"%s\"} 1\n", CloudConf.Global.Prefix, detail.Id, detail.Name)
 	}
 	return result, nil
 }
@@ -77,6 +77,6 @@ func listEps() ([]model.EpDetail, error) {
 		*req.Offset += limit
 	}
 	epsInfo.EpDetails = resources
-	epsInfo.TTL = time.Now().Add(TTL).Unix()
+	epsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	return epsInfo.EpDetails, nil
 }

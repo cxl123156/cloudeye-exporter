@@ -83,6 +83,8 @@ tar -xzvf cloudeye-exporter.v2.0.5.tar.gz
 global:
   port: ":8087" # 监听端口 :8087代表在全部网络接口上开启监听8087端口，限定内部访问也可以指定IP例如：192.168.1.100:8087
   scrape_batch_size: 300
+  resource_sync_interval_minutes: 20 # 资源信息更新频率：默认180分钟更新一次；该配置值小于10分钟，将以10分钟1次为资源信息更新频率
+  ep_ids: "xxx1,xxx2" # 可选配置，根据企业项目ID过滤资源，不配置默认查询所有资源的指标，多个ID使用英文逗号进行分割。
 auth:
   auth_url: "https://iam.{region_id}.myhuaweicloud.com/v3"
   project_name: "cn-north-1" # 华为云项目名称，可以在“华为云->统一身份认证服务->项目”中查看

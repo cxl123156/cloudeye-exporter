@@ -49,6 +49,7 @@
    + [云数据库 GeminiDB-cassandra](templates/nosql_cassandra_dashboard_template.json)
    + [DDOS高防 DDOS](templates/ddos_dashboard_template.json)
    + [内容分发网络 CDN](templates/cdn_dashboard_template.json)
+   + [云硬盘 EVS](templates/evs_dashboard_template.json)
 4. 效果展示：
    >ECS:
    > ![img.png](pic/ecs.jpg)

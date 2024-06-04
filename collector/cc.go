@@ -55,7 +55,7 @@ func (getter CCInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.MetricI
 			return ccInfo.LabelInfo, ccInfo.FilterMetrics
 		}
 		ccInfo.LabelInfo, ccInfo.FilterMetrics = buildResourceInfoAndMetrics(metricNames, connections, packages, bandwidths)
-		ccInfo.TTL = time.Now().Add(TTL).Unix()
+		ccInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return ccInfo.LabelInfo, ccInfo.FilterMetrics
 }

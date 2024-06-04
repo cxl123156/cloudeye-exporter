@@ -41,7 +41,7 @@ func (getter CDMInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metric
 		}
 		cdmInfo.LabelInfo = resourceInfos
 		cdmInfo.FilterMetrics = filterMetrics
-		cdmInfo.TTL = time.Now().Add(TTL).Unix()
+		cdmInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return cdmInfo.LabelInfo, cdmInfo.FilterMetrics
 }

@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 var (
 	clientConfig = flag.String("config", "./clouds.yml", "Path to the cloud configuration file")
 	securityMod  = flag.Bool("s", false, "Get ak sk from command line")
+	getVersion   = flag.Bool("v", false, "Get version from command line")
 	ak, sk       string
 )
 
@@ -64,8 +66,16 @@ func getAkSkFromCommandLine() {
 	}
 }
 
+func getVersionFunc() {
+	if *getVersion {
+		fmt.Printf("cloudeye-exporter version: %s", collector.Version)
+		os.Exit(0)
+	}
+}
+
 func main() {
 	flag.Parse()
+	getVersionFunc()
 	logs.InitLog()
 	getAkSkFromCommandLine()
 	err := collector.InitCloudConf(*clientConfig)

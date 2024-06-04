@@ -57,7 +57,7 @@ func (getter DCAASInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricI
 
 		dcaasInfo.LabelInfo = resourceInfos
 		dcaasInfo.FilterMetrics = filterMetrics
-		dcaasInfo.TTL = time.Now().Add(TTL).Unix()
+		dcaasInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return dcaasInfo.LabelInfo, dcaasInfo.FilterMetrics
 }

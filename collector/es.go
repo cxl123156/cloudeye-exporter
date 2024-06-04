@@ -45,7 +45,7 @@ func (getter ESInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInfo
 		buildEsResourceInfo(&filterMetrics, resourceInfos)
 		esInfo.LabelInfo = resourceInfos
 		esInfo.FilterMetrics = filterMetrics
-		esInfo.TTL = time.Now().Add(TTL).Unix()
+		esInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return esInfo.LabelInfo, esInfo.FilterMetrics
 }

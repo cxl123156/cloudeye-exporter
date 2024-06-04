@@ -41,7 +41,7 @@ func (getter NoSQLInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricI
 		}
 		nosqlInfo.LabelInfo = resourceInfos
 		nosqlInfo.FilterMetrics = filterMetrics
-		nosqlInfo.TTL = time.Now().Add(TTL).Unix()
+		nosqlInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return nosqlInfo.LabelInfo, nosqlInfo.FilterMetrics
 }

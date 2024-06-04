@@ -10,15 +10,16 @@ import (
 
 func TestGaussdbGetResourceInfo(t *testing.T) {
 	sysConfig := map[string][]string{"gaussdb_mysql_instance_id,gaussdb_mysql_node_id": {"gaussdb_mysql114_innodb_bufpool_read_ahead"}}
-	patches := gomonkey.ApplyFuncReturn(getMetricConfigMap, sysConfig)
 	nodes := mockRmsResource()
 	nodes[0].Properties = map[string]interface{}{
 		"dimensions": []model.MetricsDimension{
-			{Name: "gaussdb_mysql_instance_id", Value: "0001-0001-0000001"},
+			{Name: "gaussdb_mysql_instance_id", Value: "0001-0001-000001"},
 			{Name: "gaussdb_mysql_node_id", Value: "node-0001-0001-0000001"},
 		},
+		"instanceId": "0001-0001-000001",
 	}
-	patches.ApplyFuncReturn(listResources, mockRmsResource(), nil)
+	patches := gomonkey.ApplyFuncReturn(getMetricConfigMap, sysConfig)
+	patches.ApplyFuncReturn(listResources, nodes, nil)
 	defer patches.Reset()
 
 	var gaussdbgetter GAUSSDBInfo

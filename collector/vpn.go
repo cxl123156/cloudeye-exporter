@@ -54,7 +54,7 @@ func (getter VPNInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 		buildEVPNSaInfo(&filterMetrics, resourceInfos, evpnSaMap)
 		vpnInfo.LabelInfo = resourceInfos
 		vpnInfo.FilterMetrics = filterMetrics
-		vpnInfo.TTL = time.Now().Add(TTL).Unix()
+		vpnInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return vpnInfo.LabelInfo, vpnInfo.FilterMetrics
 }

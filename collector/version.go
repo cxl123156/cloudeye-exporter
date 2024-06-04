@@ -1,0 +1,5 @@
+package collector
+
+const (
+	Version = "v2.0.9"
+)

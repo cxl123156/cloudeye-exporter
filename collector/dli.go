@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var dliInfo serversInfo
@@ -27,11 +28,41 @@ func (getter DLIInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 		// flink jobs
 		buildFlinkJobsInfo(sysConfigMap, &filterMetrics, resourceInfos)
 
+		// elastic resource pool
+		buildElasticPool(sysConfigMap, &filterMetrics, resourceInfos)
+
 		dliInfo.LabelInfo = resourceInfos
 		dliInfo.FilterMetrics = filterMetrics
-		dliInfo.TTL = time.Now().Add(TTL).Unix()
+		dliInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return dliInfo.LabelInfo, dliInfo.FilterMetrics
+}
+
+func buildElasticPool(configMap map[string][]string, filterMetrics *[]model.MetricInfoList, infos map[string]labelInfo) {
+	elasticPoolsMetricNames, ok := configMap["elastic_resource_pool_id"]
+	if !ok {
+		logs.Logger.Warnf("metric config is empty of elastic_resource_pool_id")
+		return
+	}
+
+	elasticPoolRes, err := getElasticPoolFromDLI()
+	if err != nil {
+		logs.Logger.Errorf("Get all elastic pool error: %s", err.Error())
+		return
+	}
+
+	for _, pool := range elasticPoolRes {
+		metrics := buildSingleDimensionMetrics(elasticPoolsMetricNames, "SYS.DLI", "elastic_resource_pool_id", pool.ID)
+		*filterMetrics = append(*filterMetrics, metrics...)
+		info := labelInfo{
+			Name:  []string{"name", "epId"},
+			Value: []string{pool.Name, pool.EpId},
+		}
+		keys, values := getTags(pool.Tags)
+		info.Name = append(info.Name, keys...)
+		info.Value = append(info.Value, values...)
+		infos[GetResourceKeyFromMetricInfo(metrics[0])] = info
+	}
 }
 
 func buildQueuesInfo(sysConfigMap map[string][]string, filterMetrics *[]model.MetricInfoList, resourceInfos map[string]labelInfo) {
@@ -85,7 +116,25 @@ func buildFlinkJobsInfo(sysConfigMap map[string][]string, filterMetrics *[]model
 }
 
 func getQueuesFromRMS() ([]ResourceBaseInfo, error) {
-	return getResourcesBaseInfoFromRMS("dli", "queues")
+	resp, err := listResources("dli", "queues")
+	if err != nil {
+		logs.Logger.Errorf("Failed to list resource of %s.%s, error: %s", "dli", "queues", err.Error())
+		return nil, err
+	}
+	services := make([]ResourceBaseInfo, len(resp))
+	for index, resource := range resp {
+		var queueProperties DLIQueueProperties
+		err := fmtResourceProperties(resource.Properties, &queueProperties)
+		if err != nil {
+			logs.Logger.Errorf("Fmt dli properties error: %s", err.Error())
+			continue
+		}
+		services[index].ID = fmt.Sprintf("%d", queueProperties.QueueId)
+		services[index].Name = *resource.Name
+		services[index].EpId = *resource.EpId
+		services[index].Tags = resource.Tags
+	}
+	return services, nil
 }
 
 type ListFlinkJobsRequest struct {
@@ -123,6 +172,24 @@ type FlinkJobsInfo struct {
 	JobType string
 }
 
+type ElasticPool struct {
+	EpID     string `json:"enterprise_project_id"`
+	ID       int    `json:"id"`
+	PoolName string `json:"elastic_resource_pool_name"`
+}
+
+type ElasticPoolResponse struct {
+	IsSuccess      bool          `json:"is_success"`
+	Message        string        `json:"message"`
+	Count          int           `json:"count"`
+	ElasticPools   []ElasticPool `json:"elastic_resource_pools"`
+	HttpStatusCode int           `json:"-"`
+}
+
+type DLIQueueProperties struct {
+	QueueId int `json:"queue_id"`
+}
+
 func getAllFlinkJobsInfo() ([]FlinkJobsInfo, error) {
 	var jobs []FlinkJobsInfo
 	limit := int32(100)
@@ -145,6 +212,37 @@ func getAllFlinkJobsInfo() ([]FlinkJobsInfo, error) {
 			jobs = append(jobs, FlinkJobsInfo{
 				ResourceBaseInfo: ResourceBaseInfo{ID: fmt.Sprintf("%d", job.JobID), Name: job.Name},
 				JobType:          job.JobType,
+			})
+		}
+		*request.Offset += limit
+	}
+	return jobs, nil
+}
+
+func getElasticPoolFromDLI() ([]ResourceBaseInfo, error) {
+	var jobs []ResourceBaseInfo
+	limit := int32(100)
+	offset := int32(0)
+	request := &ListFlinkJobsRequest{Limit: &limit, Offset: &offset}
+	requestDef := genDefaultReqDefWithOffsetAndLimit("/v3/{project_id}/elastic-resource-pools", new(ElasticPoolResponse))
+	logs.Logger.Infof("get all pools req is %s", requestDef)
+	for {
+		resp, err := getHcClient(getEndpoint("dli", "v3")).Sync(request, requestDef)
+		logs.Logger.Infof("get all pools finish %s", resp)
+		if err != nil {
+			return nil, err
+		}
+		poolsInfo, ok := resp.(*ElasticPoolResponse)
+		if !ok {
+			return nil, errors.New("resp type is not ElasticPoolResponse")
+		}
+		if len(poolsInfo.ElasticPools) == 0 {
+			break
+		}
+		for _, pool := range poolsInfo.ElasticPools {
+			logs.Logger.Infof("current pool is %s", pool)
+			jobs = append(jobs, ResourceBaseInfo{
+				ID: fmt.Sprintf("%d", pool.ID), Name: pool.PoolName, EpId: pool.EpID,
 			})
 		}
 		*request.Offset += limit

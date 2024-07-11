@@ -21,7 +21,7 @@ var poolsMap map[string]model.Pool
 func getELBClient() *elb.ElbClient {
 	return elb.NewElbClient(elb.ElbClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("elb", "v2")).Build())
 }
 

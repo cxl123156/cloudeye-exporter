@@ -75,7 +75,7 @@ func getAllWafInstancesFromRMS() ([]ResourceBaseInfo, error) {
 func getWAFClient() *waf.WafClient {
 	return waf.NewWafClient(waf.WafClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("waf", "v1")).Build())
 }
 

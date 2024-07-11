@@ -21,7 +21,7 @@ var (
 func getCESClient() *ces.CesClient {
 	return ces.NewCesClient(ces.CesClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("ces", "v1")).Build())
 }
 
@@ -72,7 +72,7 @@ func listAllMetrics(namespace string) ([]model.MetricInfoList, error) {
 func getCESClientV2() *cesv2.CesClient {
 	return cesv2.NewCesClient(ces.CesClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("ces", "v2")).Build())
 }
 

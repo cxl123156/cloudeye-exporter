@@ -6,9 +6,12 @@ import (
 
 	http_client "github.com/huaweicloud/huaweicloud-sdk-go-v3/core"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	eps "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eps/v1"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eps/v1/model"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eps/v1/region"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 var epsInfo = &EpsInfo{
@@ -29,7 +32,10 @@ func getEPSClient() *eps.EpsClient {
 }
 
 func getEPSClientBuilder() *http_client.HcHttpClientBuilder {
-	builder := eps.EpsClientBuilder().WithCredential(global.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithDomainId(conf.DomainID).Build())
+	builder := eps.EpsClientBuilder().WithCredential(global.NewCredentialsBuilder().
+		WithAk(conf.AccessKey).WithSk(conf.SecretKey).
+		WithDomainId(conf.DomainID).Build()).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
 	if endpoint, ok := endpointConfig["eps"]; ok {
 		builder.WithEndpoint(endpoint)
 	} else {
@@ -64,7 +70,6 @@ func listEps() ([]model.EpDetail, error) {
 
 	client := getEPSClient()
 	var resources []model.EpDetail
-
 	for {
 		response, err := client.ListEnterpriseProject(req)
 		if err != nil {
@@ -72,6 +77,10 @@ func listEps() ([]model.EpDetail, error) {
 		}
 		resources = append(resources, *response.EnterpriseProjects...)
 		if len(*response.EnterpriseProjects) == 0 {
+			break
+		}
+		if len(resources) > MaxEpsCount {
+			logs.Logger.Errorf("eps not allowed to exceed 10000")
 			break
 		}
 		*req.Offset += limit

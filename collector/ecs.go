@@ -70,7 +70,7 @@ type EcsInstancesInfo struct {
 func getECSClient() *ecs.EcsClient {
 	return ecs.NewEcsClient(ecs.EcsClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("ecs", "v2")).Build())
 }
 func getAllServer() ([]EcsInstancesInfo, error) {

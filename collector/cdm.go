@@ -49,7 +49,7 @@ func (getter CDMInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metric
 func getCDMClient() *cdm.CdmClient {
 	return cdm.NewCdmClient(cdm.CdmClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("cdm", "v1.1")).Build())
 }
 

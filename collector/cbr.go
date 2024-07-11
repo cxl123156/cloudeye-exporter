@@ -89,6 +89,6 @@ func getAllCbrInstancesFromCBR() ([]ResourceBaseInfo, error) {
 func getCBRClient() *cbr.CbrClient {
 	return cbr.NewCbrClient(cbr.CbrClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("cbr", "v3")).Build())
 }

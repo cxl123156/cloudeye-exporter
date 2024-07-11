@@ -109,7 +109,7 @@ func TestInitEndpointConfig(t *testing.T) {
 			patches := testCase.patches()
 			patches.ApplyMethod(&logs.Logger, "Errorf", func(logger *logs.LoggerConstructor, template string, args ...interface{}) {})
 			defer patches.Reset()
-			initEndpointConfig()
+			InitEndpointConfig("")
 			testCase.expect(t)
 		})
 	}

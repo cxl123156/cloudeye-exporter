@@ -15,7 +15,7 @@ import (
 func TestBuildElasticPoolWhenMapIsEmpty(t *testing.T) {
 	patches := getPatches()
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 	resourceInfos := map[string]labelInfo{}
 	filterMetrics := make([]model.MetricInfoList, 0)
 	sysConfigMap := getMetricConfigMap("SYS.DLI")
@@ -26,7 +26,7 @@ func TestBuildElasticPoolWhenMapIsEmpty(t *testing.T) {
 func TestBuildElasticPoolWhenGetError(t *testing.T) {
 	patches := getPatches()
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 	resourceInfos := map[string]labelInfo{}
 	filterMetrics := make([]model.MetricInfoList, 0)
 	sysConfigMap := map[string][]string{}
@@ -41,7 +41,7 @@ func TestBuildElasticPoolWhenGetError(t *testing.T) {
 func TestBuildElasticPool(t *testing.T) {
 	patches := getPatches()
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 	resourceInfos := map[string]labelInfo{}
 	filterMetrics := make([]model.MetricInfoList, 0)
 	sysConfigMap := map[string][]string{}
@@ -77,7 +77,7 @@ func TestBuildElasticPool(t *testing.T) {
 func TestGetQueuesFromRMS(t *testing.T) {
 	patches := getPatches()
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 	id1 := "123123123"
 	name1 := "test_name"
 	response := []rmsModel.ResourceEntity{

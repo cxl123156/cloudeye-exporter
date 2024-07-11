@@ -15,7 +15,7 @@ import (
 func TestCFWInfo_GetResourceInfo_configIsNil(t *testing.T) {
 	patches := getPatches()
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 	cfwInfoTest := CFWInfo{}
 	labelInfos, filterMetrics := cfwInfoTest.GetResourceInfo()
 	assert.Nil(t, labelInfos)
@@ -28,7 +28,7 @@ func TestCFWInfo_GetResourceInfo_dimConfigIsNotExists(t *testing.T) {
 	defer patches.Reset()
 	patches.ApplyFuncReturn(getMetricConfigMap, metricConfigMap)
 
-	logs.InitLog()
+	logs.InitLog("")
 	cfwInfoTest := CFWInfo{}
 	labelInfos, filterMetrics := cfwInfoTest.GetResourceInfo()
 	assert.Nil(t, labelInfos)
@@ -43,7 +43,7 @@ func TestCFWInfo_GetResourceInfo_dimConfigIsEmpty(t *testing.T) {
 		"fw_instance_id": nil,
 	}
 	patches.ApplyFuncReturn(getMetricConfigMap, metricConfigMap)
-	logs.InitLog()
+	logs.InitLog("")
 	cfwInfoTest := CFWInfo{}
 	labelInfos, filterMetrics := cfwInfoTest.GetResourceInfo()
 	assert.Nil(t, labelInfos)
@@ -60,7 +60,7 @@ func TestCFWInfo_GetResourceInfo_getResourcesFromRMSFailed(t *testing.T) {
 	patches.ApplyFuncReturn(getMetricConfigMap, metricConfigMap)
 	patches.ApplyFuncReturn(listResources, nil, errors.New("test err"))
 
-	logs.InitLog()
+	logs.InitLog("")
 	cfwInfoTest := CFWInfo{}
 	labelInfos, filterMetrics := cfwInfoTest.GetResourceInfo()
 	assert.Nil(t, labelInfos)
@@ -76,7 +76,7 @@ func TestCFWInfo_GetResourceInfo_success(t *testing.T) {
 	}
 	patches.ApplyFuncReturn(getMetricConfigMap, metricConfigMap)
 	patches.ApplyFuncReturn(listResources, resourceEntityInit(), nil)
-	logs.InitLog()
+	logs.InitLog("")
 	cfwInfoTest := CFWInfo{}
 	// 两个指标，两个资源
 	labelInfos, filterMetrics := cfwInfoTest.GetResourceInfo()

@@ -50,6 +50,7 @@
    + [DDOS高防 DDOS](templates/ddos_dashboard_template.json)
    + [内容分发网络 CDN](templates/cdn_dashboard_template.json)
    + [云硬盘 EVS](templates/evs_dashboard_template.json)
+   + [云数据库 GaussDB(for MySQL)](templates/gaussdb(mysql)_dashboard_template.json)
 4. 效果展示：
    >ECS:
    > ![img.png](pic/ecs.jpg)

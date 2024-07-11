@@ -76,7 +76,7 @@ func (getter GAUSSDBV5Info) GetResourceInfo() (map[string]labelInfo, []cesmodel.
 func getGaussdbforopengaussClient() *gaussdbforopengauss.GaussDBforopenGaussClient {
 	return gaussdbforopengauss.NewGaussDBforopenGaussClient(gaussdbforopengauss.GaussDBforopenGaussClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("gaussdb-opengauss", "v3")).Build())
 }
 

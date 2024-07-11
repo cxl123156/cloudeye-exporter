@@ -1,15 +1,16 @@
 package collector
 
 import (
-	"github.com/agiledragon/gomonkey/v2"
-	"github.com/huaweicloud/cloudeye-exporter/logs"
-	"go.uber.org/zap/zapcore"
 	"sync"
 	"testing"
 	"time"
 
+	"github.com/agiledragon/gomonkey/v2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap/zapcore"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 func TestReplaceName(t *testing.T) {
@@ -146,7 +147,7 @@ func TestSetProData1(t *testing.T) {
 		return nil
 	})
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 	exporter.Collect(nil)
 	exporter.setProData(nil, nil, metricDataArray, resourceInfo, &proMap)
 	assert.Equal(t, 3, len(label.Name))

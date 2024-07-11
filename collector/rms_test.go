@@ -20,7 +20,7 @@ func TestGetRmsClient(t *testing.T) {
 func TestListResources(t *testing.T) {
 	patches := getPatches()
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 
 	id1 := "123123123"
 	name1 := "test_name"
@@ -58,7 +58,7 @@ func TestListResources(t *testing.T) {
 func TestListAllResourcesFromRMS(t *testing.T) {
 	patches := getPatches()
 	defer patches.Reset()
-	logs.InitLog()
+	logs.InitLog("")
 
 	id1 := "123123123"
 	name1 := "test_name"
@@ -99,4 +99,30 @@ func TestListAllResourcesFromRMS(t *testing.T) {
 	resources, err := listResources("ecs", "cloudservers")
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(resources))
+}
+
+func TestListEmptyResources(t *testing.T) {
+	patches := getPatches()
+	defer patches.Reset()
+	logs.InitLog("")
+
+	currentNum := int32(0)
+	response := model.ListResourcesResponse{
+		Resources: &[]model.ResourceEntity{},
+		PageInfo: &model.PageInfo{
+			CurrentCount: &currentNum,
+		},
+	}
+	endpointConfig = map[string]string{
+		"rms": "https://rms.myhuaweicloud.com",
+	}
+
+	patches.ApplyMethodFunc(getRMSClient(), "ListResources", func(request *model.ListResourcesRequest) (*model.ListResourcesResponse, error) {
+		return &response, nil
+	})
+
+	CloudConf.Global.EpIds = "0"
+	resources, err := listResources("ecs", "cloudservers")
+	assert.Nil(t, err)
+	assert.Equal(t, 0, len(resources))
 }

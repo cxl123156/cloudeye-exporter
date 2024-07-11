@@ -44,6 +44,8 @@ func (getter RDSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 					dimName = "postgresql_cluster_id"
 				case "sqlserver":
 					dimName = "rds_cluster_sqlserver_id"
+				default:
+					logs.Logger.Error("Failed to match case")
 				}
 				if metricNames, ok := sysConfigMap[dimName]; ok {
 					metrics := buildSingleDimensionMetrics(metricNames, "SYS.RDS", dimName, instance.ID)

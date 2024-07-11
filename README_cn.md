@@ -81,14 +81,18 @@ tar -xzvf cloudeye-exporter.v2.0.5.tar.gz
  *  [地区和终端节点（国际站）](https://developer.huaweicloud.com/intl/en-us/endpoint?IAM)
 ```
 global:
-  port: ":8087" # 监听端口 :8087代表在全部网络接口上开启监听8087端口，限定内部访问也可以指定IP例如：192.168.1.100:8087
+  port: "{private IP}:8087" # 监听端口 :出于安全考虑，建议不将expoter服务端口暴露到公网，建议配置为127.0.0.1:{port}，或{内网ip}:{port}，例如：192.168.1.100:8087；如业务需要将该端口暴露到公网，请确保合理配置安全组，防火墙，iptables等访问控制策略，确保最小访问权限
   scrape_batch_size: 300
   resource_sync_interval_minutes: 20 # 资源信息更新频率：默认180分钟更新一次；该配置值小于10分钟，将以10分钟1次为资源信息更新频率
   ep_ids: "xxx1,xxx2" # 可选配置，根据企业项目ID过滤资源，不配置默认查询所有资源的指标，多个ID使用英文逗号进行分割。
+  logs_conf_path: "/root/logs.yml" # 可选配置，指定日志打印配置文件路径，建议使用绝对路径。若未指定，程序将默认使用执行启动命令所在目录下的日志配置文件。
+  metrics_conf_path: "/root/metric.yml" # 可选配置，指定指标配置文件路径，建议使用绝对路径。若未指定，程序将默认使用执行启动命令所在目录下的指标配置文件。
+  endpoints_conf_path: "/root/endpoints.yml" # 可选配置，指定服务域名配置文件路径，建议使用绝对路径。若未指定，程序将默认使用执行启动命令所在目录下的服务域名配置文件。
+  ignore_ssl_verify: false # 可选配置，exporter查询资源/指标时默认校验ssl证书；若用户因ssl证书校验导致功能异常，可将该配置项配置为true跳过ssl证书校验
 auth:
   auth_url: "https://iam.{region_id}.myhuaweicloud.com/v3"
   project_name: "cn-north-1" # 华为云项目名称，可以在“华为云->统一身份认证服务->项目”中查看
-  access_key: "" # IAM用户访问密钥 您可参考3.1章节使用命令行输入加密后的ak sk，避免在配置文件中明文配置AK SK
+  access_key: "" # IAM用户访问密钥 您可参考4.1章节，使用脚本将ak sk解密后传入，避免因在配置文件中明文配置AK SK而引发信息泄露
   secret_key: ""
   region: "cn-north-1" # 区域ID
 ```
@@ -110,7 +114,7 @@ auth:
 ./cloudeye-exporter -config=clouds.yml
 ```
 
-3.1 出于安全考虑cloudeye-exporter提供了 -s参数, 可以通过命令行交互的方式输入ak sk避免明文配置在clouds.yml文件中引起泄露
+4.1 出于安全考虑cloudeye-exporter提供了 -s参数, 可以通过命令行交互的方式输入ak sk避免明文配置在clouds.yml文件中引起泄露
 ```shell
 ./cloudeye-exporter -s true
 ```

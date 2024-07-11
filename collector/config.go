@@ -2,6 +2,7 @@ package collector
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -21,12 +22,11 @@ type CloudAuth struct {
 	ProjectName string `yaml:"project_name"`
 	ProjectID   string `yaml:"project_id"`
 	DomainName  string `yaml:"domain_name"`
-	AccessKey   string `yaml:"access_key"`
-	Region      string `yaml:"region"`
-	SecretKey   string `yaml:"secret_key"`
-	AuthURL     string `yaml:"auth_url"`
-	UserName    string `yaml:"user_name"`
-	Password    string `yaml:"password"`
+	// 建议您优先使用ReadMe文档中 4.1章节的方式，使用脚本将AccessKey,SecretKey解密后传入，避免在配置文件中明文配置AK SK导致信息泄露
+	AccessKey string `yaml:"access_key"`
+	Region    string `yaml:"region"`
+	SecretKey string `yaml:"secret_key"`
+	AuthURL   string `yaml:"auth_url"`
 }
 
 type Global struct {
@@ -38,6 +38,10 @@ type Global struct {
 	ScrapeBatchSize             int    `yaml:"scrape_batch_size"`
 	ResourceSyncIntervalMinutes int    `yaml:"resource_sync_interval_minutes"`
 	EpIds                       string `yaml:"ep_ids"`
+	MetricsConfPath             string `yaml:"metrics_conf_path"`
+	LogsConfPath                string `yaml:"logs_conf_path"`
+	EndpointsConfPath           string `yaml:"endpoints_conf_path"`
+	IgnoreSSLVerify             bool   `yaml:"ignore_ssl_verify"`
 }
 
 type CloudConfig struct {
@@ -72,8 +76,6 @@ func InitCloudConf(file string) error {
 	if err != nil {
 		return err
 	}
-
-	initEndpointConfig()
 	return err
 }
 
@@ -118,6 +120,18 @@ func SetDefaultConfigValues(config *CloudConfig) {
 	if config.Global.ResourceSyncIntervalMinutes <= 0 {
 		config.Global.ResourceSyncIntervalMinutes = 180
 	}
+
+	if config.Global.MetricsConfPath == "" {
+		config.Global.MetricsConfPath = "./metric.yml"
+	}
+
+	if config.Global.LogsConfPath == "" {
+		config.Global.LogsConfPath = "./logs.yml"
+	}
+
+	if config.Global.EndpointsConfPath == "" {
+		config.Global.EndpointsConfPath = "./endpoints.yml"
+	}
 }
 
 type MetricConf struct {
@@ -129,7 +143,7 @@ var metricConf map[string]MetricConf
 
 func InitMetricConf() error {
 	metricConf = make(map[string]MetricConf)
-	data, err := ioutil.ReadFile("metric.yml")
+	data, err := ioutil.ReadFile(CloudConf.Global.MetricsConfPath)
 	if err != nil {
 		return err
 	}
@@ -158,12 +172,9 @@ type Config struct {
 	DomainName       string
 	EndpointType     string
 	IdentityEndpoint string
-	Password         string
 	Region           string
 	ProjectID        string
 	ProjectName      string
-	Token            string
-	Username         string
 	UserID           string
 }
 
@@ -174,9 +185,8 @@ func InitConfig() error {
 	conf.ProjectName = CloudConf.Auth.ProjectName
 	conf.ProjectID = CloudConf.Auth.ProjectID
 	conf.DomainName = CloudConf.Auth.DomainName
-	conf.Username = CloudConf.Auth.UserName
 	conf.Region = CloudConf.Auth.Region
-	conf.Password = CloudConf.Auth.Password
+	// 安全模式下，ak/sk通过用户交互获取，避免明文方式存在于存储介质中
 	if SecurityMod {
 		conf.AccessKey = TmpAK
 		conf.SecretKey = TmpSK
@@ -186,12 +196,12 @@ func InitConfig() error {
 	}
 
 	if conf.ProjectID == "" && conf.ProjectName == "" {
-		logs.Logger.Error("Init config error: ProjectID or ProjectName must setting.")
+		fmt.Printf("Init config error: ProjectID or ProjectName must setting.")
 		return errors.New("init config error: ProjectID or ProjectName must setting")
 	}
 	req, err := http.NewRequest("GET", conf.IdentityEndpoint, nil)
 	if err != nil {
-		logs.Logger.Error("Auth url is invalid.")
+		fmt.Printf("Auth url is invalid.")
 		return err
 	}
 	host = req.Host
@@ -199,11 +209,11 @@ func InitConfig() error {
 	if conf.ProjectID == "" {
 		resp, err := getProjectInfo()
 		if err != nil {
-			logs.Logger.Errorf("Get project info error: %s", err.Error())
+			fmt.Printf("Get project info error: %s", err.Error())
 			return err
 		}
 		if len(*resp.Projects) == 0 {
-			logs.Logger.Error("project info is empty")
+			fmt.Printf("Project info is empty")
 			return errors.New("project info is empty")
 		}
 
@@ -223,18 +233,23 @@ func getProjectInfo() (*model.KeystoneListProjectsResponse, error) {
 					WithAk(conf.AccessKey).
 					WithSk(conf.SecretKey).
 					Build()).
-			WithHttpConfig(config.DefaultHttpConfig().
-				WithIgnoreSSLVerification(true)).
+			WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 			Build())
 	return iamclient.KeystoneListProjects(&model.KeystoneListProjectsRequest{Name: &conf.ProjectName})
 }
 
 var endpointConfig map[string]string
 
-func initEndpointConfig() {
-	context, err := ioutil.ReadFile("endpoints.yml")
+func InitEndpointConfig(path string) {
+	realPath, err := NormalizePath(path)
 	if err != nil {
-		logs.Logger.Errorf("Init endpoint config error: %s", err.Error())
+		logs.Logger.Errorf("Normalize endpoint config err: %s", err.Error())
+		return
+	}
+
+	context, err := ioutil.ReadFile(realPath)
+	if err != nil {
+		logs.Logger.Infof("Invalid endpoint config path, default config will be used instead")
 		return
 	}
 	err = yaml.Unmarshal(context, &endpointConfig)

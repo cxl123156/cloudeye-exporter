@@ -86,7 +86,7 @@ func (getter EVSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 func getEVSClient() *evs.EvsClient {
 	return evs.NewEvsClient(evs.EvsClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("evs", "v2")).Build())
 }
 

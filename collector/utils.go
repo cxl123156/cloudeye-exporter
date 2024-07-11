@@ -21,6 +21,8 @@ import (
 )
 
 const MinimumResourceInfoSyncInterval = 10
+const MaxNamespacesCount = 1000
+const MaxEpsCount = 10000
 
 var tagRegexp *regexp.Regexp
 
@@ -206,7 +208,7 @@ func buildDimensionMetrics(metricNames []string, namespace string, dimensions []
 }
 
 func getHcClient(endpoint string) *core.HcHttpClient {
-	return core.NewHcHttpClient(impl.NewDefaultHttpClient(config.DefaultHttpConfig().WithIgnoreSSLVerification(true))).
+	return core.NewHcHttpClient(impl.NewDefaultHttpClient(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))).
 		WithCredential(basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
 		WithEndpoints([]string{endpoint})
 }

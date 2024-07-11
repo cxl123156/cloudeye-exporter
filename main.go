@@ -17,9 +17,10 @@ import (
 
 var (
 	clientConfig = flag.String("config", "./clouds.yml", "Path to the cloud configuration file")
-	securityMod  = flag.Bool("s", false, "Get ak sk from command line")
-	getVersion   = flag.Bool("v", false, "Get version from command line")
-	ak, sk       string
+	// 安全模式，从用户交互输入获取ak/sk，避免明文ak/sk敏感信息存储在配置文件中
+	securityMod = flag.Bool("s", false, "Get ak sk from command line")
+	getVersion  = flag.Bool("v", false, "Get version from command line")
+	ak, sk      string
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -30,8 +31,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	targets := strings.Split(target, ",")
+	if len(targets) > collector.MaxNamespacesCount {
+		http.Error(w, "namespaces not allowed to exceed 1000", 400)
+		return
+	}
 	registry := prometheus.NewRegistry()
-
 	logs.Logger.Infof("Start to monitor services: %s", targets)
 	exporter := collector.GetMonitoringCollector(targets)
 	registry.MustRegister(exporter)
@@ -55,10 +59,11 @@ func epHandler(w http.ResponseWriter, r *http.Request) {
 func getAkSkFromCommandLine() {
 	if *securityMod {
 		collector.SecurityMod = *securityMod
+		// 用户交互输入ak/sk，避免明文配置敏感信息
 		fmt.Print("Please input ak&sk split with space: (eg: {example_ak example_sk})")
 		_, err := fmt.Scanln(&ak, &sk)
 		if err != nil {
-			logs.Logger.Error("Read ak sk error: ", err.Error())
+			fmt.Printf("Read ak sk error: %s", err.Error())
 			return
 		}
 		collector.TmpAK = ak
@@ -68,7 +73,7 @@ func getAkSkFromCommandLine() {
 
 func getVersionFunc() {
 	if *getVersion {
-		fmt.Printf("cloudeye-exporter version: %s", collector.Version)
+		fmt.Printf("Cloudeye-exporter version: %s", collector.Version)
 		os.Exit(0)
 	}
 }
@@ -76,18 +81,8 @@ func getVersionFunc() {
 func main() {
 	flag.Parse()
 	getVersionFunc()
-	logs.InitLog()
 	getAkSkFromCommandLine()
-	err := collector.InitCloudConf(*clientConfig)
-	if err != nil {
-		logs.Logger.Error("Init Cloud Config From File error: ", err.Error())
-		logs.FlushLogAndExit(1)
-	}
-	err = collector.InitMetricConf()
-	if err != nil {
-		logs.Logger.Error("Init metric Config error: ", err.Error())
-		logs.FlushLogAndExit(1)
-	}
+	initConf()
 
 	http.HandleFunc(collector.CloudConf.Global.MetricPath, handler)
 	http.HandleFunc(collector.CloudConf.Global.EpsInfoPath, epHandler)
@@ -101,4 +96,20 @@ func main() {
 		logs.Logger.Errorf("Error occur when start server %s", err.Error())
 		logs.FlushLogAndExit(1)
 	}
+}
+
+func initConf() {
+	err := collector.InitCloudConf(*clientConfig)
+	if err != nil {
+		fmt.Printf("Init Cloud Config From File error: %s", err.Error())
+		os.Exit(1)
+	}
+
+	logs.InitLog(collector.CloudConf.Global.LogsConfPath)
+	err = collector.InitMetricConf()
+	if err != nil {
+		logs.Logger.Errorf("Init metric Config error: %s", err.Error())
+		logs.FlushLogAndExit(1)
+	}
+	collector.InitEndpointConfig(collector.CloudConf.Global.EndpointsConfPath)
 }

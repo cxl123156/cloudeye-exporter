@@ -122,6 +122,6 @@ func getAllAPIGAppsInstances() ([]APIGAppsInfo, error) {
 func getAPIGSClient() *apig.ApigClient {
 	return apig.NewApigClient(apig.ApigClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("apig", "v1.0")).Build())
 }

@@ -61,15 +61,19 @@ The "URL" value can be get from [Identity and Access Management (IAM) endpoint l
 ```
 global:
   prefix: "huaweicloud"
-  port: ":8087"
+  port: "{private IP}:8087" # For security purposes, you are advised not to expose the Expoter service port to the public network. You are advised to set this parameter to 127.0.0.1:{port} or {private IP address}:{port}, for example, 192.168.1.100:8087. If the port needs to be exposed to the public network, ensure that the security group, firewall, and iptables access control policies are properly configured to meet the minimum access permission principle.
   metric_path: "/metrics"
   scrape_batch_size: 300
   resource_sync_interval_minutes: 20 # Update frequency of resource information: resource information is updated every 180 minutes by default; If this parameter is set to a value less than 10 minutes, the information is updated every 10 minutes.
   ep_ids: "xxx1,xxx2" # This is optional. Filter resources by enterpries project, cloudeye-exporter will get all resources when this is empty, if you need multiple enterprise project, use comma split them.
+  logs_conf_path: "/root/logs.yml" # This is optional. We recommend that you use an absolute path for the log configuration file path. If this line is absent, the program will use configuration file in the directory where the startup command is executed by default.
+  metrics_conf_path: "/root/metrics.yml" # This is optional. We recommend that you use an absolute path for the metrics configuration file path. If this line is absent, the program will use configuration file in the directory where the startup command is executed by default.
+  endpoints_conf_path: "/root/endpoints.yml" # This is optional. We recommend that you use an absolute path for the service endpoints configuration file path. If this line is absent, the program will use configuration file in the directory where the startup command is executed by default.
+  ignore_ssl_verify: false # This is optional. The SSL certificate is verified by default when the exporter queries resources or indicators. If the exporter is abnormal due to SSL certificate verification, you can set this configuration to true to skip SSL certificate verification.
 auth:
   auth_url: "https://iam.{region_id}.myhuaweicloud.com/v3"
   project_name: "{project_name}"
-  access_key: "{access_key}"
+  access_key: "{access_key}" # It is strongly remommended that you use a script to decrypt the AK/SK by following the instructions provided in section 4.1 to prevent information leakage caused by plaintext AK/SK configuration in the configuration file.
   secret_key: "{secret_key}"
   region: "{region}"
 ```

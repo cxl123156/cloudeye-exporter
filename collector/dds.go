@@ -125,6 +125,6 @@ func fmtDdsInstance(instance ddsmodel.QueryInstanceResponse) DdsInstanceInfo {
 func getDDSClient() *dds.DdsClient {
 	return dds.NewDdsClient(dds.DdsClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("dds", "v3")).Build())
 }

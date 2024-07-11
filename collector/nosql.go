@@ -15,11 +15,11 @@ import (
 
 var (
 	nosqlInfo serversInfo
-	dimMap    = map[string]string{
-		"cassandra": "cassandra_cluster_id,cassandra_node_id",
-		"mongodb":   "mongodb_cluster_id,mongodb_node_id",
-		"influxdb":  "influxdb_cluster_id,influxdb_node_id",
-		"redis":     "redis_cluster_id,redis_node_id",
+	dimMap    = map[string][]string{
+		"cassandra": {"cassandra_cluster_id,cassandra_node_id"},
+		"mongodb":   {"mongodb_cluster_id", "mongodb_cluster_id,mongodb_node_id"},
+		"influxdb":  {"influxdb_cluster_id,influxdb_node_id"},
+		"redis":     {"redis_cluster_id", "redis_cluster_id,redis_node_id"},
 	}
 )
 
@@ -47,17 +47,28 @@ func (getter NoSQLInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricI
 }
 
 func buildMetricsAndInfo(instance nosqlmodel.ListInstancesResult, filterMetrics *[]model.MetricInfoList, resourceInfos map[string]labelInfo) {
-	dimStr, ok := dimMap[instance.Datastore.Type]
+	dimStrArr, ok := dimMap[instance.Datastore.Type]
 	if !ok {
 		logs.Logger.Debugf("Instances type is invalid")
 		return
 	}
-	metricNames := getMetricConfigMap("SYS.NoSQL")[dimStr]
-	if len(metricNames) == 0 {
-		logs.Logger.Debugf("metric names is empty: %s", dimStr)
-		return
+	var metricNames []string
+	for _, dimStr := range dimStrArr {
+		metricNames = getMetricConfigMap("SYS.NoSQL")[dimStr]
+		if len(metricNames) == 0 {
+			logs.Logger.Debugf("metric names is empty: %s", dimStr)
+			continue
+		}
+		dimName := strings.Split(dimStr, ",")
+		if len(dimName) == 1 {
+			buildClusterResources(instance, dimName, metricNames, filterMetrics, resourceInfos)
+		} else {
+			buildNodeDimResources(instance, dimName, metricNames, filterMetrics, resourceInfos)
+		}
 	}
-	dimName := strings.Split(dimStr, ",")
+}
+
+func buildNodeDimResources(instance nosqlmodel.ListInstancesResult, dimName []string, metricNames []string, filterMetrics *[]model.MetricInfoList, resourceInfos map[string]labelInfo) {
 	for _, group := range instance.Groups {
 		for _, node := range group.Nodes {
 			metrics := buildDimensionMetrics(metricNames, "SYS.NoSQL",
@@ -71,6 +82,16 @@ func buildMetricsAndInfo(instance nosqlmodel.ListInstancesResult, filterMetrics 
 			resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = nodeInfo
 		}
 	}
+}
+
+func buildClusterResources(instance nosqlmodel.ListInstancesResult, dimName []string, metricNames []string, filterMetrics *[]model.MetricInfoList, resourceInfos map[string]labelInfo) {
+	metrics := buildSingleDimensionMetrics(metricNames, "SYS.NoSQL", dimName[0], instance.Id)
+	*filterMetrics = append(*filterMetrics, metrics...)
+	instanceInfo := labelInfo{
+		Name:  []string{"instanceName", "lbIPAddress", "lbPort", "epId", "type"},
+		Value: []string{instance.Name, getDefaultString(instance.LbIpAddress), getDefaultString(instance.LbPort), instance.EnterpriseProjectId, instance.Datastore.Type},
+	}
+	resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = instanceInfo
 }
 
 func getAllNoSQLInstances() ([]nosqlmodel.ListInstancesResult, error) {
@@ -97,6 +118,6 @@ func getAllNoSQLInstances() ([]nosqlmodel.ListInstancesResult, error) {
 func getNoSQLClient() *nosql.GaussDBforNoSQLClient {
 	return nosql.NewGaussDBforNoSQLClient(nosql.GaussDBforNoSQLClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(true)).
+		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("gaussdb-nosql", "v3")).Build())
 }

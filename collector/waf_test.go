@@ -5,10 +5,10 @@ import (
 	"testing"
 
 	"github.com/agiledragon/gomonkey/v2"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/waf/v1/model"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/huaweicloud/cloudeye-exporter/logs"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/waf/v1/model"
 )
 
 func TestWAFInfo_GetResourceInfo(t *testing.T) {
@@ -56,7 +56,7 @@ func TestWAFInfo_GetResourceInfo(t *testing.T) {
 				patches.ApplyFuncReturn(getMetricConfigMap, sysConfig)
 				patches.ApplyFuncReturn(listResources, mockRmsResource(), errors.New(""))
 
-				logs.InitLog()
+				logs.InitLog("")
 			}
 			getter := WAFInfo{}
 			got, got1 := getter.GetResourceInfo()
@@ -104,7 +104,7 @@ func TestWafGetResourceInfo_getAllWafInstancesFromRMSErr(t *testing.T) {
 	patches.ApplyFuncReturn(getMetricConfigMap, sysConfig)
 	patches.ApplyFuncReturn(listResources, mockRmsResource(), errors.New(""))
 
-	logs.InitLog()
+	logs.InitLog("")
 	var wafGetter WAFInfo
 	labels, metrics := wafGetter.GetResourceInfo()
 	assert.Nil(t, labels)
@@ -135,7 +135,7 @@ func TestWafGetResourceInfo_getAllPremiumWafInstancesNormal(t *testing.T) {
 		},
 	}
 	patches = gomonkey.ApplyMethodReturn(wafClient, "ListInstance", resp, nil)
-	logs.InitLog()
+	logs.InitLog("")
 	var wafGetter WAFInfo
 	labels, metrics := wafGetter.GetResourceInfo()
 	assert.Equal(t, 2, len(labels))
@@ -167,7 +167,7 @@ func TestWafGetResourceInfo_getAllPremiumWafInstancesErr(t *testing.T) {
 	}
 	patches = gomonkey.ApplyMethodReturn(wafClient, "ListInstance", resp, errors.New(""))
 
-	logs.InitLog()
+	logs.InitLog("")
 	var wafGetter WAFInfo
 	labels, metrics := wafGetter.GetResourceInfo()
 	assert.Nil(t, labels)
@@ -213,7 +213,7 @@ func Test_getAllPremiumWafInstances(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			patches := getPatches()
-			logs.InitLog()
+			logs.InitLog("")
 			if tt.name == "normal" {
 				wafClient := getWAFClient()
 				resp := &model.ListInstanceResponse{

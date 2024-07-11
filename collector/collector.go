@@ -59,8 +59,12 @@ func (exporter *BaseHuaweiCloudExporter) listMetrics(namespace string) ([]model.
 	allResourcesInfo, metrics := exporter.listAllResources(namespace)
 	logs.Logger.Debugf("[%s] Resource number of %s: %d", exporter.txnKey, namespace, len(allResourcesInfo))
 
-	if len(metrics) > 0 && CloudConf.Global.EpIds != "" {
+	if len(metrics) > 0 {
 		return metrics, allResourcesInfo
+	}
+	// 用户指定了EPID但是metrics为空的场景下,则不应返回数据
+	if CloudConf.Global.EpIds != "" {
+		return nil, nil
 	}
 	logs.Logger.Debugf("[%s] Start to getAllMetric from CES", exporter.txnKey)
 	allMetrics, err := listAllMetrics(namespace)

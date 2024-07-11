@@ -77,9 +77,9 @@ func (c ConfLoader) LoadData(data []byte, cfg interface{}) error {
 	return err
 }
 
-func InitLog() {
+func InitLog(logsConfPath string) {
 	var cfg map[string][]Config
-	err := newYamlLoader().LoadFile("./logs.yml", &cfg)
+	err := newYamlLoader().LoadFile(logsConfPath, &cfg)
 	if err != nil {
 		fmt.Printf("Fail to load logs.yml, error: %s", err.Error())
 		return

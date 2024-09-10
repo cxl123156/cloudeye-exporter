@@ -9,25 +9,37 @@
       "pluginName": "Prometheus"
     }
   ],
-  "description": "【华为云GAUSSDB（for MySql）监控指标说明】https://support.huaweicloud.com/usermanual-gaussdbformysql/gaussdbformysql_03_0085.html",
+  "description": "【华为云数据湖探索支持的监控指标】https://support.huaweicloud.com/usermanual-dli/dli_01_0445.html",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1722560228277,
+  "iteration": 1722562647084,
   "links": [],
   "panels": [
     {
+      "collapsed": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "panels": [],
+      "title": "DLI队列指标",
+      "type": "row"
+    },
+    {
+      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": "auto",
-            "displayMode": "color-background",
+            "align": null,
             "filterable": false
           },
           "mappings": [],
@@ -35,8 +47,12 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "rgba(0, 0, 0, 0)",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           }
@@ -45,52 +61,48 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "是否是主节点"
+              "options": "队列名称"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 100
-              },
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "from": "",
-                    "id": 1,
-                    "text": "是",
-                    "to": "",
-                    "type": 1,
-                    "value": "master"
-                  },
-                  {
-                    "from": "",
-                    "id": 2,
-                    "text": "否",
-                    "to": "",
-                    "type": 1,
-                    "value": "slave"
-                  }
-                ]
+                "value": 222
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "CPU使用率"
+              "options": "队列ID"
             },
             "properties": [
               {
-                "id": "unit",
-                "value": "percent"
-              },
+                "id": "custom.width",
+                "value": 167
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "队列CPU使用率"
+            },
+            "properties": [
               {
                 "id": "custom.width",
-                "value": 100
+                "value": 352
               },
               {
-                "id": "color"
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
               },
               {
                 "id": "thresholds",
@@ -102,8 +114,8 @@
                       "value": null
                     },
                     {
-                      "color": "yellow",
-                      "value": 60
+                      "color": "#EAB839",
+                      "value": 70
                     },
                     {
                       "color": "red",
@@ -121,70 +133,20 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "网络输入吞吐量"
+              "options": "队列内存使用率"
             },
             "properties": [
               {
-                "id": "unit",
-                "value": "Bps"
-              },
-              {
                 "id": "custom.width",
-                "value": 120
+                "value": 379
               },
               {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
+                "id": "custom.align",
+                "value": "center"
               },
               {
-                "id": "noValue",
-                "value": "0 B/s"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "网络输出吞吐量"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "Bps"
-              },
-              {
-                "id": "custom.width",
-                "value": 120
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "noValue",
-                "value": "0 B/s"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "内存使用率"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "percent"
-              },
-              {
-                "id": "custom.width",
-                "value": 100
+                "id": "custom.displayMode",
+                "value": "color-background"
               },
               {
                 "id": "thresholds",
@@ -196,8 +158,52 @@
                       "value": null
                     },
                     {
-                      "color": "yellow",
-                      "value": 60
+                      "color": "#EAB839",
+                      "value": 70
+                    },
+                    {
+                      "color": "red",
+                      "value": 85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "noValue",
+                "value": "0%"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "队列磁盘使用率"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 70
                     },
                     {
                       "color": "red",
@@ -209,106 +215,23 @@
               {
                 "id": "noValue",
                 "value": "0%"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "数据库总连接数"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 120
               },
               {
-                "id": "color"
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": null
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 50
-                    },
-                    {
-                      "color": "red",
-                      "value": 100
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "noValue",
-                "value": "0"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "当前活跃连接数"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 120
-              },
-              {
-                "id": "color"
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": null
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 20
-                    },
-                    {
-                      "color": "red",
-                      "value": 40
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "noValue",
-                "value": "0"
+                "id": "unit",
+                "value": "percent"
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 1
       },
-      "id": 16,
+      "id": 2,
       "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
         "showHeader": true,
         "sortBy": []
       },
@@ -316,95 +239,51 @@
       "targets": [
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql001_cpu_util{epId=~\"$EPS\"}",
+          "exemplar": true,
+          "expr": "huaweicloud_sys_dli_queue_cpu_usage{epId=~\"$EPS\"}",
           "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
+          "legendFormat": "",
           "refId": "A"
         },
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql002_mem_util{epId=~\"$EPS\"}",
+          "exemplar": true,
+          "expr": "huaweicloud_sys_dli_queue_mem_usage{epId=~\"$EPS\"}",
           "format": "table",
           "hide": false,
           "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
+          "interval": "",
+          "legendFormat": "",
           "refId": "B"
         },
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql004_bytes_in{epId=~\"$EPS\"}",
+          "exemplar": true,
+          "expr": "huaweicloud_sys_dli_queue_disk_usage{epId=~\"$EPS\"}",
           "format": "table",
           "hide": false,
           "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
+          "interval": "",
+          "legendFormat": "",
           "refId": "C"
-        },
-        {
-          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql005_bytes_out{epId=~\"$EPS\"}",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "D"
-        },
-        {
-          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql006_conn_count{epId=~\"$EPS\"}",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "E"
-        },
-        {
-          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql007_conn_active_count{epId=~\"$EPS\"}",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "F"
         }
       ],
-      "title": "GaussDB For Mysql资源总览【企业项目: $EPS，实例总数：$total】",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "DLI队列指标概览【企业项目：$EPS】",
       "transformations": [
         {
           "id": "filterFieldsByName",
           "options": {
             "include": {
               "names": [
-                "engineName",
-                "innerIp",
-                "instanceName",
                 "name",
-                "role",
+                "queue_id",
                 "Value #A",
                 "Value #B",
-                "Value #C",
-                "Value #D",
-                "Value #E",
-                "Value #F"
+                "Value #C"
               ]
             }
           }
@@ -417,21 +296,13 @@
           "id": "organize",
           "options": {
             "excludeByName": {},
-            "includeByName": {},
             "indexByName": {},
             "renameByName": {
-              "Value #A": "CPU使用率",
-              "Value #B": "内存使用率",
-              "Value #C": "网络输入吞吐量",
-              "Value #D": "网络输出吞吐量",
-              "Value #E": "数据库总连接数",
-              "Value #F": "当前活跃连接数",
-              "engineName": "数据库引擎",
-              "innerIp": "内网IP",
-              "innerPort": "",
-              "instanceName": "实例名称",
-              "name": "节点名称",
-              "role": "是否是主节点"
+              "Value #A": "队列CPU使用率",
+              "Value #B": "队列内存使用率",
+              "Value #C": "队列磁盘使用率",
+              "name": "队列名称",
+              "queue_id": "队列ID"
             }
           }
         }
@@ -444,432 +315,31 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "decimals": null,
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计测量对象的CPU利用率",
+      "description": "队列CPU使用率：展示用户队列的CPU使用率。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 8,
+        "w": 8,
         "x": 0,
-        "y": 9
-      },
-      "hiddenSeries": false,
-      "id": 2,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.17",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql001_cpu_util{epId=~\"$EPS\"} - 0",
-          "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-CPU使用率",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "CPU使用率",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计测量对象的内存利用率",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 9
-      },
-      "hiddenSeries": false,
-      "id": 3,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.17",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql002_mem_util{epId=~\"$EPS\"} - 0",
-          "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-内存使用率",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "内存使用率",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计平均每秒从测量对象的所有网络适配器输入的流量",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "Bps"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 18
-      },
-      "hiddenSeries": false,
-      "id": 4,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.17",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql004_bytes_in{epId=~\"$EPS\"} - 0",
-          "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-网络输入吞吐量",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "网络输入吞吐量",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "Bps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计平均每秒从测量对象的所有网络适配器输出的流量",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "Bps"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 18
-      },
-      "hiddenSeries": false,
-      "id": 5,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.17",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql005_bytes_out{epId=~\"$EPS\"} - 0",
-          "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-网络输出吞吐量",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "网络输出吞吐量",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "Bps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计连接到MySQL服务器的总连接数",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 27
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 6,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -890,9 +360,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql006_conn_count{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_queue_cpu_usage{epId=~\"$EPS\"}",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-数据库总连接数",
+          "legendFormat": "队列名称：{{name}}",
           "refId": "A"
         }
       ],
@@ -900,7 +370,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "数据库总连接数",
+      "title": "队列CPU使用率",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -916,7 +386,8 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "$$hashKey": "object:170",
+          "format": "percent",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -924,6 +395,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:171",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -943,32 +415,31 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计当前活跃的连接数",
+      "description": "队列内存使用率：展示用户队列的内存使用率。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "none"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 27
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 7,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -989,9 +460,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql007_conn_active_count{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_queue_mem_usage{epId=~\"$EPS\"}",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-当前活跃连接数",
+          "legendFormat": "队列名称：{{name}}",
           "refId": "A"
         }
       ],
@@ -999,7 +470,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "当前活跃连接数",
+      "title": "队列内存使用率",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1015,7 +486,8 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "$$hashKey": "object:170",
+          "format": "percent",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1023,6 +495,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:171",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1042,32 +515,31 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计事务执行次数，含提交的和回退的",
+      "description": "队列磁盘使用率：展示用户队列的磁盘使用率。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "次/秒"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 36
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 8,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -1088,9 +560,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql009_tps{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_queue_disk_usage{epId=~\"$EPS\"}",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-事务执行频次",
+          "legendFormat": "队列名称：{{name}}",
           "refId": "A"
         }
       ],
@@ -1098,7 +570,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "事务执行频次",
+      "title": "队列磁盘使用率",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1114,7 +586,8 @@
       },
       "yaxes": [
         {
-          "format": "次/秒",
+          "$$hashKey": "object:170",
+          "format": "percent",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1122,6 +595,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:171",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1141,11 +615,9 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计数据库每秒执行select SQL语句数",
+      "description": "展示用户队列中状态为提交中的作业数。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "次/秒"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1153,20 +625,21 @@
       "gridPos": {
         "h": 9,
         "w": 12,
-        "x": 12,
-        "y": 36
+        "x": 0,
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 9,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -1187,9 +660,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql008_qps{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_queue_job_launching_num{epId=~\"$EPS\"}",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-query语句执行频率",
+          "legendFormat": "队列名称：{{name}}",
           "refId": "A"
         }
       ],
@@ -1197,7 +670,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "query语句执行频率",
+      "title": "提交中作业数",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1213,7 +686,8 @@
       },
       "yaxes": [
         {
-          "format": "次/秒",
+          "$$hashKey": "object:170",
+          "format": "个",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1221,6 +695,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:171",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1240,11 +715,9 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计平均每秒Insert语句执行次数",
+      "description": "展示用户队列中状态为运行中的作业数。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "次/秒"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1252,20 +725,21 @@
       "gridPos": {
         "h": 9,
         "w": 12,
-        "x": 0,
-        "y": 45
+        "x": 12,
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 10,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -1286,9 +760,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql029_comdml_ins_count{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_queue_job_running_num{epId=~\"$EPS\"}",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-insert语句执行频率",
+          "legendFormat": "队列名称：{{name}}",
           "refId": "A"
         }
       ],
@@ -1296,7 +770,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Insert语句执行频率",
+      "title": "运行中作业数",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1312,7 +786,8 @@
       },
       "yaxes": [
         {
-          "format": "次/秒",
+          "$$hashKey": "object:170",
+          "format": "个",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1320,6 +795,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:171",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1339,11 +815,9 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计平均每秒Delete语句执行次数",
+      "description": "展示用户队列中状态为已完成的作业数。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "次/秒"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1351,20 +825,21 @@
       "gridPos": {
         "h": 9,
         "w": 12,
-        "x": 12,
-        "y": 45
+        "x": 0,
+        "y": 28
       },
       "hiddenSeries": false,
       "id": 11,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -1385,9 +860,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql028_comdml_del_count{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_queue_job_succeed_num{epId=~\"$EPS\"}",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-Delete语句执行频率",
+          "legendFormat": "队列名称：{{name}}",
           "refId": "A"
         }
       ],
@@ -1395,7 +870,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Delete语句执行频率",
+      "title": "已完成作业数",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1411,7 +886,8 @@
       },
       "yaxes": [
         {
-          "format": "次/秒",
+          "$$hashKey": "object:170",
+          "format": "个",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1419,6 +895,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:171",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1438,11 +915,9 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计平均每秒Update语句执行次数",
+      "description": "展示用户队列中状态为已失败的作业数。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "次/秒"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1450,20 +925,21 @@
       "gridPos": {
         "h": 9,
         "w": 12,
-        "x": 0,
-        "y": 54
+        "x": 12,
+        "y": 28
       },
       "hiddenSeries": false,
       "id": 12,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -1484,9 +960,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql034_comdml_upd_count{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_queue_job_failed_num{epId=~\"$EPS\"}",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-Update语句执行频率",
+          "legendFormat": "队列名称：{{name}}",
           "refId": "A"
         }
       ],
@@ -1494,7 +970,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Update语句执行频率",
+      "title": "已失败作业数",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1510,7 +986,8 @@
       },
       "yaxes": [
         {
-          "format": "次/秒",
+          "$$hashKey": "object:170",
+          "format": "个",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1518,6 +995,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:171",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1532,103 +1010,207 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于展示每分钟MySQL产生慢日志的数量",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 14,
+      "title": "DLI Flink作业指标",
+      "type": "row"
+    },
+    {
+      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "unit": "个/分钟"
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flink作业CPU使用率"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 70
+                    },
+                    {
+                      "color": "red",
+                      "value": 85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "noValue",
+                "value": "0%"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flink作业内存使用率"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 70
+                    },
+                    {
+                      "color": "red",
+                      "value": 85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "noValue",
+                "value": "0%"
+              }
+            ]
+          }
+        ]
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 54
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 38
       },
-      "hiddenSeries": false,
-      "id": 13,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "connected",
+      "id": 15,
       "options": {
-        "alertThreshold": true
+        "showHeader": true,
+        "sortBy": []
       },
-      "percentage": false,
       "pluginVersion": "7.5.17",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql074_slow_queries{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_flink_cpu_usage",
+          "format": "table",
+          "instant": true,
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-慢日志个数统计",
+          "legendFormat": "",
           "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "慢日志个数统计",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "个/分钟",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
         },
         {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
+          "exemplar": true,
+          "expr": "huaweicloud_sys_dli_flink_mem_usage",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
         }
       ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "DLI Flink指标概览",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "flink_job_id",
+                "job_type",
+                "name",
+                "Value #A",
+                "Value #B"
+              ]
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Value #A": "Flink作业CPU使用率",
+              "Value #B": "Flink作业内存使用率",
+              "flink_job_id": "Flink作业ID",
+              "job_type": "Flink作业类型",
+              "name": "Flink作业名称"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "aliasColors": {},
@@ -1636,32 +1218,30 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计IO写入的IOPS。",
+      "description": "展示用户Flink作业的CPU使用率。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "cps"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
         "x": 0,
-        "y": 63
+        "y": 45
       },
       "hiddenSeries": false,
-      "id": 14,
+      "id": 17,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -1682,9 +1262,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql342_iostat_iops_write{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_flink_cpu_usage",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-IO写IOPS",
+          "legendFormat": "作业名称：{{name}}；作业类型：{{job_type}}",
           "refId": "A"
         }
       ],
@@ -1692,7 +1272,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "IO写IOPS",
+      "title": "Flink作业CPU使用率",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1708,7 +1288,8 @@
       },
       "yaxes": [
         {
-          "format": "cps",
+          "$$hashKey": "object:895",
+          "format": "percent",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1716,6 +1297,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:896",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1735,32 +1317,30 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-      "description": "云数据库GaussDB（for mysql）：该指标用于统计IO读取的IOPS。",
+      "description": "展示用户Flink作业的内存使用率。",
       "fieldConfig": {
-        "defaults": {
-          "unit": "cps"
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
         "x": 12,
-        "y": 63
+        "y": 45
       },
       "hiddenSeries": false,
-      "id": 15,
+      "id": 18,
       "legend": {
         "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
         "show": true,
         "total": false,
-        "values": true
+        "values": false
       },
       "lines": true,
       "linewidth": 1,
@@ -1781,9 +1361,9 @@
         {
           "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
           "exemplar": true,
-          "expr": "huaweicloud_sys_gaussdb_gaussdb_mysql344_iostat_iops_read{epId=~\"$EPS\"} - 0",
+          "expr": "huaweicloud_sys_dli_flink_mem_usage",
           "interval": "",
-          "legendFormat": "{{innerIp}}({{name}})-IO读IOPS",
+          "legendFormat": "作业名称：{{name}}；作业类型：{{job_type}}",
           "refId": "A"
         }
       ],
@@ -1791,7 +1371,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "IO读IOPS",
+      "title": "Flink作业内存使用率",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1807,7 +1387,8 @@
       },
       "yaxes": [
         {
-          "format": "cps",
+          "$$hashKey": "object:895",
+          "format": "percent",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1815,6 +1396,205 @@
           "show": true
         },
         {
+          "$$hashKey": "object:896",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
+      "description": "展示用户Flink作业每秒输入的字节数。",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 53
+      },
+      "hiddenSeries": false,
+      "id": 19,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.17",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
+          "exemplar": true,
+          "expr": "huaweicloud_sys_dli_flink_read_bytes_per_second\r\n\r",
+          "interval": "",
+          "legendFormat": "作业名称：{{name}}；作业类型：{{job_type}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Flink作业字节输入速率",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:895",
+          "format": "Bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:896",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
+      "description": "展示用户Flink作业每秒输出的字节数。",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 53
+      },
+      "hiddenSeries": false,
+      "id": 20,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.5.17",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
+          "exemplar": true,
+          "expr": "huaweicloud_sys_dli_flink_write_bytes_per_second\r\n\r",
+          "interval": "",
+          "legendFormat": "作业名称：{{name}}；作业类型：{{job_type}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Flink作业字节输出速率",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:895",
+          "format": "Bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:896",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1829,7 +1609,6 @@
       }
     }
   ],
-  "refresh": false,
   "schemaVersion": 27,
   "style": "dark",
   "tags": [],
@@ -1850,37 +1629,10 @@
         "options": [],
         "query": {
           "query": "huaweicloud_epinfo",
-          "refId": "3vi-gauss-test-prometheus-EPS-Variable-Query"
-        },
-        "refresh": 1,
-        "regex": "/epName=\"(?<text>[^\"]+)|epId=\"(?<value>[^\"]+)/g",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": null,
-        "current": {},
-        "datasource": "${DS_3VI-GAUSS-TEST-PROMETHEUS}",
-        "definition": "query_result(count(huaweicloud_sys_gaussdb_gaussdb_mysql001_cpu_util{epId=~\"$EPS\"}))",
-        "description": null,
-        "error": null,
-        "hide": 2,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
-        "name": "total",
-        "options": [],
-        "query": {
-          "query": "query_result(count(huaweicloud_sys_gaussdb_gaussdb_mysql001_cpu_util{epId=~\"$EPS\"}))",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/{} (.*) .*/",
+        "regex": "/epName=\"(?<text>[^\"]+)|epId=\"(?<value>[^\"]+)/g",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
@@ -1892,12 +1644,12 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
-  "title": "GaussDB For Mysql",
-  "uid": "PkQqyyUSa",
-  "version": 2
+  "title": "数据湖探索-DLI",
+  "uid": "8CeuYnuSz",
+  "version": 3
 }

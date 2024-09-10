@@ -51,6 +51,8 @@ var (
 		"SYS.MRS":           MRSInfo{},
 		"SYS.DAYU":          DayuInfo{},
 		"SYS.CFW":           CFWInfo{},
+		"SYS.WANQMonitor":   WanMonitorInfo{},
+		"SYS.ANC":           ANCInfo{},
 	}
 )
 

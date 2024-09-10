@@ -17,7 +17,7 @@ import (
 
 var (
 	ccInfo serversInfo
-	limit  = int32(2000)
+	limit  = int32(500)
 )
 
 const (
@@ -65,21 +65,21 @@ func buildResourceInfoAndMetrics(metricNames []string, connections map[string]mo
 	resourceInfos := map[string]labelInfo{}
 	filterMetrics := make([]cesmodel.MetricInfoList, 0)
 	for _, bandwidth := range bandwidths {
-		if *bandwidth.CloudConnectionId == "" || *bandwidth.BandwidthPackageId == "" {
+		if bandwidth.CloudConnectionId == "" || bandwidth.BandwidthPackageId == "" {
 			continue
 		}
 		metrics := buildDimensionMetrics(metricNames, CCNamespace,
-			[]cesmodel.MetricsDimension{{Name: "cloud_connect_id", Value: *bandwidth.CloudConnectionId},
-				{Name: "bwp_id", Value: *bandwidth.BandwidthPackageId},
-				{Name: "region_bandwidth_id", Value: *bandwidth.Id}})
+			[]cesmodel.MetricsDimension{{Name: "cloud_connect_id", Value: bandwidth.CloudConnectionId},
+				{Name: "bwp_id", Value: bandwidth.BandwidthPackageId},
+				{Name: "region_bandwidth_id", Value: bandwidth.Id}})
 		filterMetrics = append(filterMetrics, metrics...)
 
 		var info labelInfo
-		connectionName, connectionValue := getConnectionInfo(connections, *bandwidth.CloudConnectionId)
+		connectionName, connectionValue := getConnectionInfo(connections, bandwidth.CloudConnectionId)
 		info.Name = append(info.Name, connectionName...)
 		info.Value = append(info.Value, connectionValue...)
 
-		pkgName, pkgValue := getBandwidthPackageInfo(packages, *bandwidth.BandwidthPackageId)
+		pkgName, pkgValue := getBandwidthPackageInfo(packages, bandwidth.BandwidthPackageId)
 		info.Name = append(info.Name, pkgName...)
 		info.Value = append(info.Value, pkgValue...)
 
@@ -87,7 +87,7 @@ func buildResourceInfoAndMetrics(metricNames []string, connections map[string]mo
 			info.Name = append(info.Name, "interRegions", "bandwidthName")
 			info.Value = append(info.Value, fmt.Sprintf("%s<->%s",
 				getDefaultString((*bandwidth.InterRegions)[0].LocalRegionId), getDefaultString((*bandwidth.InterRegions)[0].RemoteRegionId)),
-				getDefaultString(bandwidth.Name))
+				getDefaultString(&bandwidth.Name))
 		}
 		resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = info
 	}
@@ -97,7 +97,7 @@ func buildResourceInfoAndMetrics(metricNames []string, connections map[string]mo
 func getConnectionInfo(connections map[string]model.CloudConnection, connectionId string) ([]string, []string) {
 	connection, ok := connections[connectionId]
 	if ok {
-		return []string{"connectionName", "connectionEpId"}, []string{*connection.Name, *connection.EnterpriseProjectId}
+		return []string{"connectionName", "connectionEpId"}, []string{connection.Name, *connection.EnterpriseProjectId}
 	}
 	return nil, nil
 }
@@ -108,7 +108,7 @@ func getBandwidthPackageInfo(packages map[string]model.BandwidthPackage, connect
 		return nil, nil
 	}
 	name := []string{"packageName", "packageEpId"}
-	vale := []string{getDefaultString(pkg.Name), getDefaultString(pkg.EnterpriseProjectId)}
+	vale := []string{getDefaultString(&pkg.Name), getDefaultString(pkg.EnterpriseProjectId)}
 	if pkg.Tags != nil {
 		keys, values := getTags(fmtTags(pkg.Tags))
 		name = append(name, keys...)
@@ -126,8 +126,8 @@ func listCCConnections() (map[string]model.CloudConnection, error) {
 		if err != nil {
 			return connections, err
 		}
-		for _, connection := range *response.CloudConnections {
-			connections[*connection.Id] = connection
+		for _, connection := range response.CloudConnections {
+			connections[connection.Id] = connection
 		}
 		if response.PageInfo.NextMarker == nil {
 			break
@@ -147,8 +147,8 @@ func listBandwidthPackages() (map[string]model.BandwidthPackage, error) {
 			logs.Logger.Errorf("Failed to list BandwidthPackages, error: %s", err.Error())
 			return bandwidthPackages, err
 		}
-		for _, bandwidthPackage := range *response.BandwidthPackages {
-			bandwidthPackages[*bandwidthPackage.Id] = bandwidthPackage
+		for _, bandwidthPackage := range response.BandwidthPackages {
+			bandwidthPackages[bandwidthPackage.Id] = bandwidthPackage
 		}
 		if response.PageInfo.NextMarker == nil {
 			break
@@ -163,7 +163,7 @@ func getCCClient() *cc.CcClient {
 }
 
 func getCCClientBuilder() *http_client.HcHttpClientBuilder {
-	builder := cc.CcClientBuilder().WithCredential(global.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).Build()).
+	builder := cc.CcClientBuilder().WithCredential(global.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithDomainId(conf.DomainID).Build()).
 		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
 	if endpoint, ok := endpointConfig["cc"]; ok {
 		builder.WithEndpoint(endpoint)
@@ -183,7 +183,7 @@ func listInterRegionBandwidths() ([]model.InterRegionBandwidth, error) {
 			logs.Logger.Errorf("Failed to list InterRegionBandwidths, error: %s", err.Error())
 			return resources, err
 		}
-		resources = append(resources, *response.InterRegionBandwidths...)
+		resources = append(resources, response.InterRegionBandwidths...)
 		if response.PageInfo.NextMarker == nil {
 			break
 		}

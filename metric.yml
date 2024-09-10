@@ -782,6 +782,87 @@ SYS.GAUSSDB:
     - gaussdb_mysql126_table_open_cache_hits
     - gaussdb_mysql127_table_open_cache_misses
     - gaussdb_mysql128_long_trx_count
+    'gaussdb_mysql_ha_id,gaussdb_mysql_ha_node_id':
+    - rds001_cpu_util
+    - rds002_mem_util
+    - rds003_iops
+    - rds004_bytes_in
+    - rds005_bytes_out
+    - rds006_conn_count
+    - rds007_conn_active_count
+    - rds008_qps
+    - rds009_tps
+    - rds010_innodb_buf_usage
+    - rds011_innodb_buf_hit
+    - rds012_innodb_buf_dirty
+    - rds013_innodb_reads
+    - rds014_innodb_writes
+    - rds015_innodb_read_count
+    - rds016_innodb_write_count
+    - rds017_innodb_log_write_req_count
+    - rds018_innodb_log_write_count
+    - rds019_innodb_log_fsync_count
+    - rds020_temp_tbl_count
+    - rds021_myisam_buf_usage
+    - rds022_myisam_buf_write_hit
+    - rds023_myisam_buf_read_hit
+    - rds024_myisam_disk_write_count
+    - rds025_myisam_disk_read_count
+    - rds026_myisam_buf_write_count
+    - rds027_myisam_buf_read_count
+    - rds028_comdml_del_count
+    - rds029_comdml_ins_count
+    - rds030_comdml_ins_sel_count
+    - rds031_comdml_rep_count
+    - rds032_comdml_rep_sel_count
+    - rds033_comdml_sel_count
+    - rds034_comdml_upd_count
+    - rds035_innodb_del_row_count
+    - rds036_innodb_ins_row_count
+    - rds037_innodb_read_row_count
+    - rds038_innodb_upd_row_count
+    - rds039_disk_util
+    - rds047_disk_total_size
+    - rds048_disk_used_size
+    - rds049_disk_read_throughput
+    - rds050_disk_write_throughput
+    - rds051_avg_disk_sec_per_read
+    - rds052_avg_disk_sec_per_write
+    - rds072_conn_usage
+    - rds073_replication_delay
+    - rds074_slow_queries
+    - rds075_avg_disk_ms_per_read
+    - rds076_avg_disk_ms_per_write
+    - rds020_temp_tbl_rate
+    - sys_swap_usage
+    - rds_innodb_lock_waits
+    - rds_bytes_recv_rate
+    - rds_bytes_sent_rate
+    - rds_innodb_pages_read_rate
+    - rds_innodb_pages_written_rate
+    - rds_innodb_os_log_written_rate
+    - rds_innodb_buffer_pool_read_requests_rate
+    - rds_innodb_buffer_pool_write_requests_rate
+    - rds_innodb_buffer_pool_pages_flushed_rate
+    - rds_innodb_log_waits_rate
+    - rds_created_tmp_tables_rate
+    - rds_wait_thread_count
+    - rds_innodb_row_lock_time_avg
+    - rds_innodb_row_lock_current_waits
+    - rds077_vma
+    - rds078_threads
+    - rds079_vm_hwm
+    - rds080_vm_peak
+    - rds081_vm_ioutils
+    - rds082_semi_sync_tx_avg_wait_time
+    - rds173_replication_delay_avg
+    - io_bandwidth_usage
+    - iops_usage
+    - rds_innodb_log_waits_count
+    - rds_buffer_pool_wait_free
+    - rds_conn_active_usage
+    - rds_long_transaction
+    - rds_mdl_lock_count
 SYS.GAUSSDBV5:
   dim_metric_name:
     gaussdbv5_instance_id:
@@ -802,6 +883,26 @@ SYS.GAUSSDBV5:
       - rds017_disk_read_throughput
       - rds020_avg_disk_ms_per_write
       - rds021_avg_disk_ms_per_read
+SYS.DBPROXY:
+  dim_metric_name:
+    dbproxy_instance_id,dbproxy_node_id:
+      - rds_proxy_frontend_connections
+      - rds_proxy_backend_connections
+      - rds_proxy_average_response_time
+      - rds_proxy_query_per_seconds
+      - rds_proxy_read_query_proportions
+      - rds_proxy_write_query_proportions
+      - rds001_cpu_util
+      - rds002_mem_util
+      - rds004_bytes_in
+      - rds005_bytes_out
+      - rds_proxy_frontend_connection_creation
+      - rds_proxy_transaction_query
+      - rds_proxy_multi_statement_query
+      - l4_out_bps_usage
+      - l4_in_bps_usage
+      - m9_abnormal_servers
+      - ma_normal_servers
 SYS.NAT:
   dim_metric_name:
     nat_gateway_id:
@@ -2122,3 +2223,100 @@ SYS.CDN:
       - network_ddos_bw
       - network_ddos_pps
       - req_num
+SYS.WANQMonitor:
+  dim_metric_name:
+    task_id:
+      - packet_loss_rate_avg
+      - redirect_cost_avg
+      - availability_rate
+      - rtt_avg
+      - dns_cost_avg
+      - connection_cost_avg
+      - ssl_cost_avg
+      - request_cost_avg
+      - response_cost_avg
+      - download_cost_avg
+    task_id,city:
+      - packet_loss_rate_avg
+      - redirect_cost_avg
+      - dns_cost_avg
+      - availability_rate
+      - connection_cost_avg
+      - rtt_avg
+      - ssl_cost_avg
+      - request_cost_avg
+      - response_cost_avg
+      - download_cost_avg
+    task_id,operator:
+      - packet_loss_rate_avg
+      - redirect_cost_avg
+      - availability_rate
+      - dns_cost_avg
+      - rtt_avg
+      - connection_cost_avg
+      - ssl_cost_avg
+      - request_cost_avg
+      - response_cost_avg
+      - download_cost_avg
+    task_id,operator,city:
+      - packet_loss_rate_avg
+      - redirect_cost_avg
+      - dns_cost_avg
+      - connection_cost_avg
+      - ssl_cost_avg
+      - availability_rate
+      - request_cost_avg
+      - response_cost_avg
+      - rtt_avg
+      - download_cost_avg
+SYS.ANC:
+  resource: "rms"
+  dim_metric_name:
+    anc_anc_id:
+      - network_incoming_bits_rate
+      - network_outgoing_bits_rate
+      - network_incoming_packets_rate
+      - network_outgoing_packets_rate
+    anc_anc_id,anc_clientassociation_id:
+      - vpc_connections
+      - vpc_new_connections
+      - vpc_inbound_bandwidth
+      - vpc_outbound_bandwidth
+      - vpc_inbound_pps
+      - vpc_outbound_pps
+      - vpc_inbound_traffic
+      - vpc_outbound_traffic
+    anc_anc_id,anc_serviceassociation_id:
+      - service_inbound_traffic
+      - service_outbound_traffic
+      - service_inbound_bits_rate
+      - service_outbound_bits_rate
+      - service_inbound_pps
+      - service_outbound_pps
+      - service_new_connections
+      - service_active_connections
+      - service_connections
+    anc_service_id:
+      - service_inbound_traffic
+      - service_outbound_traffic
+      - service_inbound_bits_rate
+      - service_outbound_bits_rate
+      - service_inbound_pps
+      - service_outbound_pps
+      - service_new_connections
+      - service_active_connections
+      - service_connections
+    anc_service_id,anc_serviceregion_id:
+      - service_inbound_traffic
+      - service_outbound_traffic
+      - service_inbound_bits_rate
+      - service_outbound_bits_rate
+      - service_inbound_pps
+      - service_outbound_pps
+      - service_new_connections
+      - service_active_connections
+      - service_connections
+    anc_membergroup_id:
+      - total_server_count
+      - healthy_server_count
+      - unhealthy_server_count

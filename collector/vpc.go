@@ -17,6 +17,7 @@ type Bandwidth struct {
 type BandwidthProperties struct {
 	BandwidthType string `json:"bandwidthType"`
 	Type          string `json:"type"`
+	ChargeMode    string `json:"chargeMode"`
 }
 
 type PublicIp struct {
@@ -25,9 +26,16 @@ type PublicIp struct {
 }
 
 type PublicIpProperties struct {
-	NetworkType     string `json:"networkType"`
-	PublicIpAddress string `json:"publicIpAddress"`
-	IpVersion       int    `json:"ipVersion"`
+	NetworkType     string                      `json:"networkType"`
+	PublicIpAddress string                      `json:"publicIpAddress"`
+	IpVersion       int                         `json:"ipVersion"`
+	Bandwidth       BandwidthInPublicIpProperty `json:"bandwidth"`
+}
+
+type BandwidthInPublicIpProperty struct {
+	Name       string `json:"name"`
+	ID         string `json:"id"`
+	ChargeMode string `json:"chargeMode"`
 }
 
 var vpcInfo serversInfo
@@ -65,8 +73,8 @@ func buildPublicipsInfo(sysConfigMap map[string][]string, filterMetrics *[]model
 			metrics := buildSingleDimensionMetrics(metricNames, "SYS.VPC", "publicip_id", publicip.ID)
 			*filterMetrics = append(*filterMetrics, metrics...)
 			info := labelInfo{
-				Name:  []string{"name", "epId", "networkType", "publicIpAddress", "ipVersion"},
-				Value: []string{publicip.Name, publicip.EpId, publicip.NetworkType, publicip.PublicIpAddress, fmt.Sprintf("%d", publicip.IpVersion)},
+				Name:  []string{"name", "epId", "networkType", "publicIpAddress", "ipVersion", "bandwidthName", "bandwidthChargeMode"},
+				Value: []string{publicip.Name, publicip.EpId, publicip.NetworkType, publicip.PublicIpAddress, fmt.Sprintf("%d", publicip.IpVersion), publicip.Bandwidth.Name, publicip.Bandwidth.ChargeMode},
 			}
 			keys, values := getTags(publicip.Tags)
 			info.Name = append(info.Name, keys...)
@@ -86,8 +94,8 @@ func buildBandwidthsInfo(sysConfigMap map[string][]string, filterMetrics *[]mode
 			metrics := buildSingleDimensionMetrics(metricNames, "SYS.VPC", "bandwidth_id", bandwidth.ID)
 			*filterMetrics = append(*filterMetrics, metrics...)
 			info := labelInfo{
-				Name:  []string{"name", "epId", "bandwidthType", "type"},
-				Value: []string{bandwidth.Name, bandwidth.EpId, bandwidth.BandwidthType, bandwidth.Type},
+				Name:  []string{"name", "epId", "bandwidthType", "type", "chargeMode"},
+				Value: []string{bandwidth.Name, bandwidth.EpId, bandwidth.BandwidthType, bandwidth.Type, bandwidth.ChargeMode},
 			}
 			keys, values := getTags(bandwidth.Tags)
 			info.Name = append(info.Name, keys...)

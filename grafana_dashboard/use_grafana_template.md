@@ -51,6 +51,17 @@
    + [内容分发网络 CDN](templates/cdn_dashboard_template.json)
    + [云硬盘 EVS](templates/evs_dashboard_template.json)
    + [云数据库 GaussDB(for MySQL)](templates/gaussdb(mysql)_dashboard_template.json)
+   + [函数工作流 FunctionGraph](templates/functiongraph_dashboard_template.json)
+   + [APIG网关专享版 APIC](templates/apic_dashboard_template.json)
+   + [弹性伸缩 AS](templates/as_dashboard_template.json)
+   + [云备份 CBR](templates/cbr_dashboard_template.json)
+   + [云连接 CC](templates/cc_dashboard_template.json)
+   + [数据湖探索 DLI](templates/dli_dashboard_template.json)
+   + [数据复制服务 DRS](templates/drs_dashboard_template.json)
+   + [云数据库 GaussDB](templates/gaussdbv5_dashboard_template.json)
+   + [云数据库 GeminiDB Redis](templates/geminidb(redis)_dashboard_template.json)
+   + [NAT网关 NAT](templates/nat_dashboard_template.json)
+   + [广域网质量监控 WanQMonitor](templates/wanq_monitor_dashboard_template.json)
 4. 效果展示：
    >ECS:
    > ![img.png](pic/ecs.jpg)

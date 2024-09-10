@@ -238,8 +238,8 @@ func fmtResourceProperties(properties map[string]interface{}, value interface{})
 	return json.Unmarshal(bytes, value)
 }
 
-func getResourcesBaseInfoFromRMS(provider, resourceType string) ([]ResourceBaseInfo, error) {
-	resp, err := listResources(provider, resourceType)
+func getResourcesBaseInfoFromRMS(provider, resourceType string, optionalRegionID ...string) ([]ResourceBaseInfo, error) {
+	resp, err := listResources(provider, resourceType, optionalRegionID...)
 	if err != nil {
 		logs.Logger.Errorf("Failed to list resource of %s.%s, error: %s", provider, resourceType, err.Error())
 		return nil, err
@@ -260,4 +260,29 @@ func GetResourceInfoExpirationTime() time.Duration {
 		return MinimumResourceInfoSyncInterval * time.Minute
 	}
 	return time.Duration(intervalMinutes) * time.Minute
+}
+
+// ContainsInArray 判断字符串是否包含在数组中,由于sort.SearchStrings使用二分查找法,需要传入按字母序排序后的数组
+func ContainsInArray(sortedArray []string, target string) bool {
+	index := sort.SearchStrings(sortedArray, target)
+	if index < len(sortedArray) && sortedArray[index] == target {
+		return true
+	}
+	return false
+}
+
+func DimNameEquals(originalDimName, targetDimName string) bool {
+	if originalDimName == targetDimName {
+		return true
+	}
+	if strings.Contains(originalDimName, ",") && strings.Contains(targetDimName, ",") {
+		originalDimNameArray := strings.Split(originalDimName, ",")
+		sort.Strings(originalDimNameArray)
+		sortedDimName := strings.Join(originalDimNameArray, ",")
+		targetDimNameArray := strings.Split(targetDimName, ",")
+		sort.Strings(targetDimNameArray)
+		sortedTargetDimName := strings.Join(targetDimNameArray, ",")
+		return sortedDimName == sortedTargetDimName
+	}
+	return false
 }

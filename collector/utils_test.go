@@ -1,6 +1,7 @@
 package collector
 
 import (
+	"sort"
 	"testing"
 	"time"
 
@@ -188,7 +189,7 @@ func TestFmtTags(t *testing.T) {
 
 	valueA := "value_a"
 	tagInfo := []cbrmodel.Tag{
-		{Key: "key_a", Value: &valueA},
+		{Key: "key_a", Value: valueA},
 	}
 	tags = fmtTags(tagInfo)
 	assert.Equal(t, "value_a", tags["key_a"])
@@ -275,4 +276,23 @@ func TestGetResourceInfoExpirationTime(t *testing.T) {
 	CloudConf.Global.ResourceSyncIntervalMinutes = 5
 	expirationTime = GetResourceInfoExpirationTime()
 	assert.Equal(t, 10*time.Minute, expirationTime)
+}
+
+func TestContainsInArray(t *testing.T) {
+	testArray := []string{"a", "c", "b"}
+	sort.Strings(testArray)
+	assert.True(t, ContainsInArray(testArray, "b"))
+	assert.False(t, ContainsInArray(testArray, "g"))
+}
+
+func TestDimNameEquals(t *testing.T) {
+	dimName := "task_id,operator,city"
+	sortedDimName := "city,operator,task_id"
+	wrongDimName := "city,task_id"
+	assert.True(t, DimNameEquals(dimName, sortedDimName))
+	assert.True(t, DimNameEquals(dimName, dimName))
+	assert.False(t, DimNameEquals(dimName, wrongDimName))
+	dimName = "task_id,"
+	sortedDimName = "city"
+	assert.False(t, DimNameEquals(dimName, sortedDimName))
 }

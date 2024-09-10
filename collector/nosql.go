@@ -75,8 +75,8 @@ func buildNodeDimResources(instance nosqlmodel.ListInstancesResult, dimName []st
 				[]model.MetricsDimension{{Name: dimName[0], Value: instance.Id}, {Name: dimName[1], Value: node.Id}})
 			*filterMetrics = append(*filterMetrics, metrics...)
 			nodeInfo := labelInfo{
-				Name: []string{"instanceName", "lbIPAddress", "lbPort", "epId", "type", "nodeName", "nodePrivateIP", "nodePublicIp"},
-				Value: []string{instance.Name, getDefaultString(instance.LbIpAddress), getDefaultString(instance.LbPort), instance.EnterpriseProjectId, instance.Datastore.Type,
+				Name: []string{"instanceName", "lbIPAddress", "lbPort", "epId", "type", "mode", "nodeName", "nodePrivateIP", "nodePublicIp"},
+				Value: []string{instance.Name, getDefaultString(instance.LbIpAddress), getDefaultString(instance.LbPort), instance.EnterpriseProjectId, instance.Datastore.Type, instance.Mode,
 					node.Name, node.PrivateIp, node.PublicIp},
 			}
 			resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = nodeInfo
@@ -88,8 +88,8 @@ func buildClusterResources(instance nosqlmodel.ListInstancesResult, dimName []st
 	metrics := buildSingleDimensionMetrics(metricNames, "SYS.NoSQL", dimName[0], instance.Id)
 	*filterMetrics = append(*filterMetrics, metrics...)
 	instanceInfo := labelInfo{
-		Name:  []string{"instanceName", "lbIPAddress", "lbPort", "epId", "type"},
-		Value: []string{instance.Name, getDefaultString(instance.LbIpAddress), getDefaultString(instance.LbPort), instance.EnterpriseProjectId, instance.Datastore.Type},
+		Name:  []string{"instanceName", "lbIPAddress", "lbPort", "epId", "type", "mode"},
+		Value: []string{instance.Name, getDefaultString(instance.LbIpAddress), getDefaultString(instance.LbPort), instance.EnterpriseProjectId, instance.Datastore.Type, instance.Mode},
 	}
 	resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = instanceInfo
 }

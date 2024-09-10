@@ -51,6 +51,7 @@ Prometheus是用于展示大型测量数据的开源可视化工具，在工业�
 |湖仓构建服务|SYS.LakeFormation |√|RMS/云服务|
 |智能数据湖运营平台|SYS.DAYU |√|云服务|
 |云防火墙|SYS.CFW |√|RMS|
+|广域网质量监控|SYS.WANQMonitor |√|云服务|
 
 注：自定义标签时，key只能包含大写字母、小写字母以及中划线
 
@@ -128,6 +129,11 @@ $(./cloudeye-exporter -s true<<EOF
 $huaweiCloud_AK $huaweiCloud_SK
 EOF)
 ```
+
+5. 指标配置
+cloudeye-exporter支持的指标可在 [支持监控的服务列表](https://support.huaweicloud.com/usermanual-ces/zh-cn_topic_0202622212.html)中查看。若发现您需要的指标没有获取到，可查阅该文档将对应的指标填入metric.yml中。
+   
+
 
 ## 安装配置prometheus接入cloudeye
 1. 下载Prometheus (https://prometheus.io/download/)

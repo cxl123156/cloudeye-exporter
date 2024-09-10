@@ -96,7 +96,6 @@ func loadAgentDimensions(instanceID string) {
 		dimName.MOUNT_POINT, dimName.GPU, dimName.PROC, dimName.RAID}
 	for _, name := range dimNames {
 		request := &cesv2model.ListAgentDimensionInfoRequest{
-			ContentType: "application/json",
 			InstanceId:  instanceID,
 			DimName:     name,
 		}

@@ -28,13 +28,17 @@ func getRMSClientBuilder() *http_client.HcHttpClientBuilder {
 	return builder
 }
 
-func listResources(provider, resourceType string) ([]model.ResourceEntity, error) {
+func listResources(provider, resourceType string, optionalRegionID ...string) ([]model.ResourceEntity, error) {
+	regionID := conf.Region
+	if len(optionalRegionID) > 0 {
+		regionID = optionalRegionID[0]
+	}
 	limit := int32(200)
 	var resources []model.ResourceEntity
 	req := &model.ListResourcesRequest{
 		Provider: provider,
 		Type:     resourceType,
-		RegionId: &conf.Region,
+		RegionId: &regionID,
 		Limit:    &limit,
 	}
 	if CloudConf.Global.EpIds != "" {

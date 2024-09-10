@@ -3,23 +3,25 @@ package collector
 import (
 	"testing"
 
-	"github.com/agiledragon/gomonkey/v2"
 	cc "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cc/v3"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cc/v3/model"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 func TestCCGetResourceInfo(t *testing.T) {
 	sysConfig := map[string][]string{CCConfigDimNames: {"network_incoming_bits_rate"}}
-	patches := gomonkey.ApplyFuncReturn(getMetricConfigMap, sysConfig)
-
+	patches := getPatches()
+	patches.ApplyFuncReturn(getMetricConfigMap, sysConfig)
+	logs.InitLog("")
 	defaultEpId := "0"
 	id := "connection-0001"
 	name := "connection1"
 	connectionsPage := model.ListCloudConnectionsResponse{
 		HttpStatusCode: 200,
-		CloudConnections: &[]model.CloudConnection{
-			{Id: &id, Name: &name, EnterpriseProjectId: &defaultEpId},
+		CloudConnections: []model.CloudConnection{
+			{Id: id, Name: name, EnterpriseProjectId: &defaultEpId},
 		},
 		PageInfo: &model.PageInfo{},
 	}
@@ -32,8 +34,8 @@ func TestCCGetResourceInfo(t *testing.T) {
 
 	packagesPage := model.ListBandwidthPackagesResponse{
 		HttpStatusCode: 200,
-		BandwidthPackages: &[]model.BandwidthPackage{
-			{Id: &id, Name: &name, EnterpriseProjectId: &defaultEpId},
+		BandwidthPackages: []model.BandwidthPackage{
+			{Id: id, Name: name, EnterpriseProjectId: &defaultEpId},
 		},
 		PageInfo: &model.PageInfo{},
 	}
@@ -46,12 +48,12 @@ func TestCCGetResourceInfo(t *testing.T) {
 	remoteRegionId := "cn-test-02"
 	bandwidthsPage := model.ListInterRegionBandwidthsResponse{
 		HttpStatusCode: 200,
-		InterRegionBandwidths: &[]model.InterRegionBandwidth{
+		InterRegionBandwidths: []model.InterRegionBandwidth{
 			{
-				Id:                 &id,
-				Name:               &name,
-				CloudConnectionId:  &id,
-				BandwidthPackageId: &id,
+				Id:                 id,
+				Name:               name,
+				CloudConnectionId:  id,
+				BandwidthPackageId: id,
 				InterRegions: &[]model.InterRegion{
 					{LocalRegionId: &localRegionId, RemoteRegionId: &remoteRegionId},
 				}},

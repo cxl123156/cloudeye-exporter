@@ -6,8 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/huaweicloud/cloudeye-exporter/logs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+
+	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
 
 const namespace = "SYS.WANQMonitor"
@@ -90,8 +91,11 @@ func (getter WanMonitorInfo) GetResourceInfo() (map[string]labelInfo, []model.Me
 		getTaskIdOperatorDimInfo(metrics, &filterMetrics, resourceInfos, taskMap, probeMap)
 		getTaskIdProbeIdDimInfo(metrics, &filterMetrics, resourceInfos, taskMap, probeMap)
 		getTaskIdOperatorCityDimInfo(metrics, &filterMetrics, resourceInfos, taskMap, probeMap)
+
+		wanMonitorInfo.LabelInfo = resourceInfos
+		wanMonitorInfo.FilterMetrics = filterMetrics
 	}
-	return resourceInfos, filterMetrics
+	return wanMonitorInfo.LabelInfo, wanMonitorInfo.FilterMetrics
 }
 
 func getAllMonitorTask() map[string]Task {

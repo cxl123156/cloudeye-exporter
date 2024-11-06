@@ -6,7 +6,6 @@ import (
 
 	http_client "github.com/huaweicloud/huaweicloud-sdk-go-v3/core"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	cc "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cc/v3"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cc/v3/model"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cc/v3/region"
@@ -164,7 +163,7 @@ func getCCClient() *cc.CcClient {
 
 func getCCClientBuilder() *http_client.HcHttpClientBuilder {
 	builder := cc.CcClientBuilder().WithCredential(global.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithDomainId(conf.DomainID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
 	if endpoint, ok := endpointConfig["cc"]; ok {
 		builder.WithEndpoint(endpoint)
 	} else {

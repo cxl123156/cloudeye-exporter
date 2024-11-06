@@ -53,6 +53,12 @@ var (
 		"SYS.CFW":           CFWInfo{},
 		"SYS.WANQMonitor":   WanMonitorInfo{},
 		"SYS.ANC":           ANCInfo{},
+		"SYS.LTS":           LTSInfo{},
+		"SYS.HSS":           HSSInfo{},
+		"SYS.CloudTable":    CloudTableInfo{},
+		"SYS.EG":            EgInfo{},
+		"SYS.OBS":           OBSInfo{},
+		"SYS.DNS":           DNSInfo{},
 	}
 )
 

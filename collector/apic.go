@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	apig "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/apig/v2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/apig/v2/model"
 	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
@@ -174,6 +173,6 @@ func showDetailsOfInstanceV2(instanceID string) (*model.ShowDetailsOfInstanceV2R
 func getAPICSClient() *apig.ApigClient {
 	return apig.NewApigClient(apig.ApigClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("apig", "v2")).Build())
 }

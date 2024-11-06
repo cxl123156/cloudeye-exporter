@@ -6,7 +6,6 @@ import (
 
 	http_client "github.com/huaweicloud/huaweicloud-sdk-go-v3/core"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	eps "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eps/v1"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eps/v1/model"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eps/v1/region"
@@ -35,7 +34,7 @@ func getEPSClientBuilder() *http_client.HcHttpClientBuilder {
 	builder := eps.EpsClientBuilder().WithCredential(global.NewCredentialsBuilder().
 		WithAk(conf.AccessKey).WithSk(conf.SecretKey).
 		WithDomainId(conf.DomainID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
 	if endpoint, ok := endpointConfig["eps"]; ok {
 		builder.WithEndpoint(endpoint)
 	} else {

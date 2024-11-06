@@ -70,6 +70,14 @@ global:
   metrics_conf_path: "/root/metrics.yml" # This is optional. We recommend that you use an absolute path for the metrics configuration file path. If this line is absent, the program will use configuration file in the directory where the startup command is executed by default.
   endpoints_conf_path: "/root/endpoints.yml" # This is optional. We recommend that you use an absolute path for the service endpoints configuration file path. If this line is absent, the program will use configuration file in the directory where the startup command is executed by default.
   ignore_ssl_verify: false # This is optional. The SSL certificate is verified by default when the exporter queries resources or indicators. If the exporter is abnormal due to SSL certificate verification, you can set this configuration to true to skip SSL certificate verification.
+  
+  # This is optional. You can replace the proxy schema, host and port in the example below according to actual situation.
+  proxy_schema: "http"                      
+  proxy_host: "proxy.huaweicloud.com"        
+  proxy_port: 8080    
+  # This is optional. If the proxy requires authentication, please configure the username and password
+  proxy_username: "username"                 
+  proxy_password: "password" 
 auth:
   auth_url: "https://iam.{region_id}.myhuaweicloud.com/v3"
   project_name: "{project_name}"

@@ -52,6 +52,14 @@ Prometheus是用于展示大型测量数据的开源可视化工具，在工业�
 |智能数据湖运营平台|SYS.DAYU |√|云服务|
 |云防火墙|SYS.CFW |√|RMS|
 |广域网质量监控|SYS.WANQMonitor |√|云服务|
+|云日志服务|SYS.LTS |×|云服务|
+|视频直播|SYS.LIVE |×|云服务|
+|云原生应用网络|SYS.ANC|√|RMS|
+|企业主机安全|SYS.HSS|×|云服务|
+|表格存储服务|SYS.CloudTable|×|云服务|
+|事件网格|SYS.EG|√|RMS|
+|对象存储服务|SYS.OBS|√|RMS|
+|云解析服务|SYS.DNS|√|云服务|
 
 注：自定义标签时，key只能包含大写字母、小写字母以及中划线
 
@@ -90,6 +98,14 @@ global:
   metrics_conf_path: "/root/metric.yml" # 可选配置，指定指标配置文件路径，建议使用绝对路径。若未指定，程序将默认使用执行启动命令所在目录下的指标配置文件。
   endpoints_conf_path: "/root/endpoints.yml" # 可选配置，指定服务域名配置文件路径，建议使用绝对路径。若未指定，程序将默认使用执行启动命令所在目录下的服务域名配置文件。
   ignore_ssl_verify: false # 可选配置，exporter查询资源/指标时默认校验ssl证书；若用户因ssl证书校验导致功能异常，可将该配置项配置为true跳过ssl证书校验
+  
+  # 可选配置，根据实际情况替换示例中的代理协议、地址和端口号
+  proxy_schema: "http"                      
+  proxy_host: "proxy.huaweicloud.com"        
+  proxy_port: 8080          
+  # 可选配置，如果代理需要认证，请配置用户名和密码
+  proxy_username: "username"                 
+  proxy_password: "password"                 
 auth:
   auth_url: "https://iam.{region_id}.myhuaweicloud.com/v3"
   project_name: "cn-north-1" # 华为云项目名称，可以在“华为云->统一身份认证服务->项目”中查看

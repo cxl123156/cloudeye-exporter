@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	gaussdbforopengauss "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/gaussdbforopengauss/v3"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/gaussdbforopengauss/v3/model"
@@ -76,7 +75,7 @@ func (getter GAUSSDBV5Info) GetResourceInfo() (map[string]labelInfo, []cesmodel.
 func getGaussdbforopengaussClient() *gaussdbforopengauss.GaussDBforopenGaussClient {
 	return gaussdbforopengauss.NewGaussDBforopenGaussClient(gaussdbforopengauss.GaussDBforopenGaussClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("gaussdb-opengauss", "v3")).Build())
 }
 

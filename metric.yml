@@ -1905,6 +1905,18 @@ SYS.DDOS:
       - instance_new_connection
       - instance_concurrent_connection
       - instance_service_bandwidth_usage
+    package:
+      - instance_drop_rate
+      - instance_back_to_source_rate
+      - instance_internet_in_rate
+      - instance_new_connection
+      - instance_concurrent_connection
+    package,ip:
+      - ip_drop_rate
+      - ip_back_to_source_rate
+      - ip_internet_in_rate
+      - ip_new_connection
+      - ip_concurrent_connection
 SYS.VPN:
   dim_metric_name:
     evpn_connection_id:
@@ -2105,8 +2117,6 @@ SYS.CC:
       - network_outgoing_packets_rate
       - network_incoming_packets
       - network_outgoing_packets
-      - latency
-      - packet_loss_rate
 SYS.LakeFormation:
   resource: "service"
   dim_metric_name:
@@ -2269,6 +2279,327 @@ SYS.WANQMonitor:
       - response_cost_avg
       - rtt_avg
       - download_cost_avg
+SYS.OBS:
+  dim_metric_name:
+    bucket_name:
+      - request_get_medium_small_latency
+      - download_traffic
+      - qos_bucket_operation_write_bps_max
+      - capacity_infrequent_access_single_az
+      - request_count_delete_per_second
+      - upload_bytes_intranet
+      - extranet_processed_and_sent_time_pmb
+      - request_list_object_latency
+      - small_object_first_byte_latency
+      - request_size_gt_100MB_latency_p99
+      - capacity_infrequent_access_multi_az
+      - qos_bucket_conn_max
+      - request_put_size_gt_100MB_latency
+      - archive_request_upload_bandwidths
+      - object_num_infrequent_access_total
+      - capacity_infrequent_access
+      - intranet_received_time_pmb
+      - request_size_gt_100MB_latency_p90
+      - request_size_between_10MB_100MB_latency_p95
+      - object_num_archive_medium_object
+      - standard_ia_get_object
+      - request_put_small_latency
+      - object_num_standard_total
+      - qos_bucket_operation_total_bps_max
+      - upload_transfer_rate
+      - upload_bytes
+      - standard_upload_request_count
+      - infrequent_request_download_bandwidths
+      - capacity_total
+      - object_num_standard_multi_az
+      - request_count_multi_delete_per_second
+      - request_get_small_latency
+      - download_bytes
+      - archive_request_delete_bytes
+      - request_count_per_second
+      - object_num_infrequent_access_large_object
+      - request_put_size_between_4MB_10MB_latency
+      - request_count_monitor_5XX
+      - capacity_intelligent_tiering_total
+      - request_head_object_latency
+      - request_put_size_le_1MB_latency
+      - object_num_infrequent_access_medium_object
+      - standard_request_upload_bandwidths
+      - request_count_monitor_6XX
+      - download_bytes_extranet
+      - upload_total_request_latency
+      - request_count_get_per_second
+      - extranet_received_and_processed_time_pmb
+      - qos_bucket_operation_write_bps_threshold
+      - download_bytes_intranet
+      - request_count_put_per_second
+      - request_size_between_10MB_100MB_latency_p99
+      - intranet_processed_and_sent_time_pmb
+      - request_size_le_1MB_latency_p99
+      - request_size_le_1MB_latency_p95
+      - capacity_deep_archive
+      - request_get_size_between_1MB_4MB_latency
+      - upload_bytes_extranet
+      - download_traffic_extranet
+      - request_size_between_10MB_100MB_latency_p90
+      - qos_bucket_operation_read_bps_avg
+      - qos_bucket_operation_total_tps_avg
+      - request_break_rate
+      - qos_bucket_operation_write_tps_max
+      - download_traffic_intranet
+      - request_success_rate
+      - multi_delete_request_count
+      - upload_traffic
+      - capacity_archive
+      - request_put_medium_latency
+      - object_num_infrequent_access_single_az
+      - capacity_intelligent_tiering_infrequent
+      - upload_traffic_extranet
+      - object_num_intelligent_tiering_frequent
+      - request_get_size_between_10MB_100MB_latency
+      - total_request_latency
+      - object_num_standard_large_object
+      - qos_bucket_conn_threshold
+      - capacity_standard
+      - download_traffic_infrequent_access
+      - request_get_medium_latency
+      - qos_bucket_operation_total_tps_max
+      - request_count_monitor_7XX
+      - request_get_huge_latency
+      - object_num_infrequent_access_small_object
+      - request_size_between_1MB_4MB_latency_p99
+      - medium_object_first_byte_latency
+      - qos_bucket_operation_list_tps_threshold
+      - request_size_gt_100MB_latency_p95
+      - request_size_between_4MB_10MB_latency_p99
+      - request_size_between_1MB_4MB_latency_p90
+      - request_count_monitor_2XX
+      - infrequent_download_request_count
+      - object_num_intelligent_tiering_infrequent
+      - qos_bucket_operation_read_tps_avg
+      - download_server_request_latency
+      - capacity_standard_single_az
+      - archive_request_download_bandwidths
+      - request_put_size_between_10MB_100MB_latency
+      - object_num_standard_small_object
+      - capacity_standard_multi_az
+      - download_total_request_latency
+      - request_get_large_latency
+      - object_num_archive_small_object
+      - qos_bucket_operation_read_tps_threshold
+      - get_request_count
+      - put_request_count
+      - first_byte_latency
+      - request_count_4xx
+      - request_count_5xx
+      - qos_bucket_operation_write_tps_threshold
+      - qos_bucket_operation_read_tps_max
+      - capacity_intelligent_tiering_archive
+      - request_size_between_4MB_10MB_latency_p95
+      - request_put_large_latency
+      - object_num_deep_archive_total
+      - request_size_between_1MB_4MB_latency_p95
+      - infrequent_request_upload_bandwidths
+      - effective_request_rate
+      - intranet_sent_time_pmb
+      - intranet_received_and_processed_time_pmb
+      - request_get_size_le_1MB_latency
+      - cdn_bytes
+      - total_request_callback_latency
+      - object_num_archive_large_object
+      - qos_bucket_conn_avg
+      - qos_bucket_operation_total_bps_avg
+      - cdn_traffic
+      - request_rename_object_latency
+      - object_num_archive_total
+      - object_num_all
+      - large_object_first_byte_latency
+      - request_count_monitor_4XX
+      - qos_bucket_operation_list_tps_max
+      - upload_server_request_latency
+      - object_num_standard_medium_object
+      - qos_bucket_operation_write_tps_avg
+      - infrequent_request_delete_bytes
+      - capacity_intelligent_tiering_frequent
+      - qos_bucket_operation_read_bps_threshold
+      - qos_bucket_operation_list_tps_avg
+      - object_num_standard_single_az
+      - upload_traffic_intranet
+      - qos_bucket_operation_total_tps_threshold
+      - request_get_size_gt_100MB_latency
+      - extranet_received_time_pmb
+      - object_num_intelligent_tiering_archive
+      - request_put_size_between_1MB_4MB_latency
+      - request_size_le_1MB_latency_p90
+      - request_get_size_between_4MB_10MB_latency
+      - extranet_sent_time_pmb
+      - qos_bucket_operation_write_bps_avg
+      - qos_bucket_operation_total_bps_threshold
+      - object_num_intelligent_tiering_total
+      - request_count_monitor_3XX
+      - standard_request_delete_bytes
+      - archive_download_request_count
+      - object_num_infrequent_access_multi_az
+      - download_transfer_rate
+      - request_put_huge_latency
+      - archive_upload_request_count
+      - standard_download_request_count
+      - qos_bucket_operation_read_bps_max
+      - request_put_medium_small_latency
+      - standard_request_download_bandwidths
+      - infrequent_upload_request_count
+      - request_size_between_4MB_10MB_latency_p90
+    bucket_name,api_name:
+      - large_object_first_byte_latency
+      - request_success_rate
+      - total_request_latency
+      - request_break_rate
+      - effective_request_rate
+      - api_request_count_per_second
+      - medium_object_first_byte_latency
+      - small_object_first_byte_latency
+    bucket_name,domain_name:
+      - upload_traffic_extranet
+      - request_count_get_per_second
+      - request_count_monitor_6XX
+      - upload_traffic_intranet
+      - download_traffic_extranet
+      - download_bytes
+      - download_traffic
+      - download_bytes_extranet
+      - request_count_monitor_2XX
+      - download_bytes_intranet
+      - upload_bytes
+      - request_count_4xx
+      - request_count_put_per_second
+      - upload_bytes_intranet
+      - request_count_5xx
+      - request_count_per_second
+      - download_traffic_intranet
+      - request_success_rate
+      - request_count_delete_per_second
+      - upload_traffic
+      - request_count_monitor_3XX
+      - upload_bytes_extranet
+      - request_count_monitor_7XX
+    bucket_name,api_name,http_code:
+      - request_code_count
+    bucket_name,http_code:
+      - request_code_count
+    tenant_id:
+      - object_num_infrequent_access_multi_az
+      - get_fetch_bandwidths
+      - object_num_intelligent_tiering_infrequent
+      - cdn_traffic
+      - request_count_monitor_7XX
+      - qos_account_operation_total_tps_max
+      - request_count_put_per_second
+      - request_count_get_per_second
+      - qos_account_operation_total_bps_max
+      - qos_account_operation_write_tps_avg
+      - qos_account_operation_write_tps_threshold
+      - large_object_first_byte_latency
+      - request_count_per_second
+      - object_num_infrequent_access_total
+      - capacity_infrequent_access
+      - capacity_infrequent_access_single_az
+      - qos_account_operation_read_tps_max
+      - request_count_monitor_6XX
+      - capacity_archive
+      - standard_ia_get_object
+      - capacity_intelligent_tiering_frequent
+      - object_num_intelligent_tiering_frequent
+      - download_bytes_extranet
+      - small_object_first_byte_latency
+      - qos_account_operation_write_bps_avg
+      - get_fetch_task_concurrency
+      - qos_account_operation_total_tps_avg
+      - qos_account_operation_read_bps_threshold
+      - object_num_standard_single_az
+      - download_traffic_extranet
+      - upload_traffic_extranet
+      - qos_account_operation_list_tps_avg
+      - qos_account_operation_read_bps_avg
+      - get_mirror_fetch_bandwidths
+      - upload_bytes_extranet
+      - object_num_infrequent_access_single_az
+      - request_count_monitor_5XX
+      - qos_account_operation_read_bps_max
+      - capacity_total
+      - capacity_infrequent_access_multi_az
+      - object_num_archive_large_object
+      - download_bytes_intranet
+      - object_num_archive_small_object
+      - object_num_standard_multi_az
+      - upload_traffic
+      - cdn_bytes
+      - qos_account_operation_list_tps_threshold
+      - effective_request_rate
+      - upload_bytes
+      - object_num_standard_large_object
+      - qos_account_conn_avg
+      - request_count_delete_per_second
+      - request_count_5xx
+      - get_mirror_fetch_task_status
+      - get_mirror_range_bandwidths
+      - object_num_infrequent_access_medium_object
+      - download_traffic_intranet
+      - qos_account_operation_list_tps_max
+      - download_traffic_infrequent_access
+      - capacity_standard_multi_az
+      - object_num_intelligent_tiering_archive
+      - qos_account_operation_total_bps_threshold
+      - medium_object_first_byte_latency
+      - object_num_infrequent_access_small_object
+      - upload_traffic_intranet
+      - object_num_intelligent_tiering_total
+      - capacity_intelligent_tiering_archive
+      - object_num_deep_archive_total
+      - total_request_latency
+      - qos_account_threshold
+      - object_num_all
+      - qos_account_operation_read_tps_threshold
+      - request_count_monitor_3XX
+      - qos_account_operation_write_bps_max
+      - request_break_rate
+      - qos_account_operation_total_bps_avg
+      - capacity_intelligent_tiering_infrequent
+      - request_count_4xx
+      - qos_account_operation_read_tps_avg
+      - object_num_infrequent_access_large_object
+      - object_num_standard_medium_object
+      - object_num_standard_small_object
+      - capacity_standard
+      - qos_account_operation_total_tps_threshold
+      - object_num_archive_total
+      - object_num_archive_medium_object
+      - request_success_rate
+      - request_latency_account_p90
+      - capacity_standard_single_az
+      - upload_bytes_intranet
+      - request_latency_account_p95
+      - download_bytes
+      - qos_account_conn_max
+      - request_count_monitor_2XX
+      - request_latency_account_p99
+      - capacity_intelligent_tiering_total
+      - get_fetch_task_bps
+      - request_count_monitor_4XX
+      - download_traffic
+      - object_num_standard_total
+      - capacity_deep_archive
+      - qos_account_operation_write_bps_threshold
+      - qos_account_operation_write_tps_max
+    tenant_id,http_code:
+      - request_code_count
+SYS.DNS:
+  dim_metric_name:
+    dns_recordset_id:
+      - recordset_noerror_count
+    dns_zone_id:
+      - zone_noerror_count
+      - zone_nxdomain_count
+      - zone_servfail_count
 SYS.ANC:
   resource: "rms"
   dim_metric_name:
@@ -2320,3 +2651,76 @@ SYS.ANC:
       - total_server_count
       - healthy_server_count
       - unhealthy_server_count
+SYS.Live:
+  dim_metric_name:
+    domain:
+      - bandwidth
+      - http_4xx_proportion
+      - http_5xx_proportion
+      - inject_bandwidth
+      - inject_concurrency_number
+      - online
+      - play_traffic
+      - qps
+SYS.LTS:
+  dim_metric_name:
+    log_group_id:
+      - indexing_traffic
+      - number_of_reads
+      - read_traffic
+      - used_storage
+      - write_traffic
+      - written_rows
+    log_group_id,log_stream_id:
+      - indexing_traffic
+      - number_of_reads
+      - read_traffic
+      - used_storage
+      - write_traffic
+      - written_rows
+SYS.HSS:
+  dim_metric_name:
+    hss_enterprise_project_id:
+      - host_num
+      - unprotected_host_num
+      - risky_host_num
+      - uninstalled_or_offline_agent_num
+SYS.EG:
+  resource: "rms"
+  dim_metric_name:
+    source_name:
+      - event_num
+    channel_id:
+      - pub_process_time
+      - pub_failed_rate
+      - pub_num,pub_success_num
+      - pub_failed_num
+      - pub_success_rate
+    streaming_id:
+      - streaming_live_status
+      - streaming_success_rate
+      - streaming_process_time
+      - streaming_process_num
+      - streaming_failed_num
+      - streaming_success_num
+      - streaming_failed_rate
+    subscription_id:
+      - sub_num
+      - sub_success_num
+      - sub_process_time
+      - sub_retry_rate
+      - sub_failed_rate
+      - event_time
+      - sub_failed_num
+      - sub_retry_num
+      - sub_success_rate
+    subscription_id,target_id:
+      - sub_failed_rate
+      - sub_failed_num
+      - event_time
+      - sub_success_rate
+      - sub_process_time
+      - sub_num
+      - sub_retry_rate
+      - sub_success_num
+      - sub_retry_num

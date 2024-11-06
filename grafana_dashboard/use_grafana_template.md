@@ -62,6 +62,14 @@
    + [云数据库 GeminiDB Redis](templates/geminidb(redis)_dashboard_template.json)
    + [NAT网关 NAT](templates/nat_dashboard_template.json)
    + [广域网质量监控 WanQMonitor](templates/wanq_monitor_dashboard_template.json)
+   + [视频直播 LIVE](templates/live_dashboard_template.json)
+   + [云日志服务 LTS](templates/lts_dashboard_template.json)
+   + [企业主机安全 HSS](templates/hss_dashboard_template.json)
+   + [表格存储服务 CloudTable](templates/cloudtable_dashboard_template.json)
+   + [云原生应用网络 ANC](templates/anc_dashboard_template.json)
+   + [事件网格 EG](templates/eg_dashboard_template.json)
+   + [对象存储服务 OBS](templates/obs_dashboard_template.json)
+   + [云解析服务 DNS](templates/dns_dashboard_template.json)
 4. 效果展示：
    >ECS:
    > ![img.png](pic/ecs.jpg)

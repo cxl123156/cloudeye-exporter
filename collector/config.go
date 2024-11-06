@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	v3 "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/model"
 	"gopkg.in/yaml.v3"
@@ -42,6 +41,13 @@ type Global struct {
 	LogsConfPath                string `yaml:"logs_conf_path"`
 	EndpointsConfPath           string `yaml:"endpoints_conf_path"`
 	IgnoreSSLVerify             bool   `yaml:"ignore_ssl_verify"`
+
+	// 用户配置的proxy信息
+	HttpSchema string `yaml:"proxy_schema"`
+	HttpHost   string `yaml:"proxy_host"`
+	HttpPort   int    `yaml:"proxy_port"`
+	UserName   string `yaml:"proxy_username"`
+	Password   string `yaml:"proxy_password"`
 }
 
 type CloudConfig struct {
@@ -233,7 +239,7 @@ func getProjectInfo() (*model.KeystoneListProjectsResponse, error) {
 					WithAk(conf.AccessKey).
 					WithSk(conf.SecretKey).
 					Build()).
-			WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+			WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 			Build())
 	return iamclient.KeystoneListProjects(&model.KeystoneListProjectsRequest{Name: &conf.ProjectName})
 }

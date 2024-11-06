@@ -6,7 +6,6 @@ import (
 
 	http_client "github.com/huaweicloud/huaweicloud-sdk-go-v3/core"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	v1 "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rms/v1"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rms/v1/model"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rms/v1/region"
@@ -19,7 +18,7 @@ func getRMSClient() *v1.RmsClient {
 }
 
 func getRMSClientBuilder() *http_client.HcHttpClientBuilder {
-	builder := v1.RmsClientBuilder().WithCredential(global.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithDomainId(conf.DomainID).Build()).WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
+	builder := v1.RmsClientBuilder().WithCredential(global.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithDomainId(conf.DomainID).Build()).WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))
 	if endpoint, ok := endpointConfig["rms"]; ok {
 		builder.WithEndpoint(endpoint)
 	} else {

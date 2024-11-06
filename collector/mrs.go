@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	mrs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/mrs/v1"
 	mrsmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/mrs/v1/model"
@@ -78,7 +77,7 @@ func getMRSClusterFromRMS() ([]ResourceBaseInfo, error) {
 func getMRSClient() *mrs.MrsClient {
 	return mrs.NewMrsClient(mrs.MrsClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("mrs", "v1.1")).Build())
 }
 

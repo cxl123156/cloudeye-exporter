@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	lakeformation "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/lakeformation/v1"
 	lakeformationmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/lakeformation/v1/model"
@@ -60,7 +59,7 @@ func (getter LakeFormationInfo) GetResourceInfo() (map[string]labelInfo, []model
 func getLakeFormationClient() *lakeformation.LakeFormationClient {
 	return lakeformation.NewLakeFormationClient(lakeformation.LakeFormationClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("lakeformation", "v1")).Build())
 }
 

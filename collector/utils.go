@@ -12,10 +12,11 @@ import (
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/def"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/impl"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+	iam "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
 
 	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
@@ -208,7 +209,7 @@ func buildDimensionMetrics(metricNames []string, namespace string, dimensions []
 }
 
 func getHcClient(endpoint string) *core.HcHttpClient {
-	return core.NewHcHttpClient(impl.NewDefaultHttpClient(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))).
+	return core.NewHcHttpClient(impl.NewDefaultHttpClient(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify))).
 		WithCredential(basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
 		WithEndpoints([]string{endpoint})
 }
@@ -285,4 +286,17 @@ func DimNameEquals(originalDimName, targetDimName string) bool {
 		return sortedDimName == sortedTargetDimName
 	}
 	return false
+}
+
+func GetIAMClient() *iam.IamClient {
+	return iam.NewIamClient(
+		iam.IamClientBuilder().
+			WithEndpoint(getEndpoint("iam", "v3")).
+			WithCredential(
+				global.NewCredentialsBuilder().
+					WithAk(conf.AccessKey).
+					WithSk(conf.SecretKey).
+					Build()).
+			WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+			Build())
 }

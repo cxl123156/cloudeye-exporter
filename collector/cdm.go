@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	cdm "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cdm/v1"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/cdm/v1/model"
 	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
@@ -49,7 +48,7 @@ func (getter CDMInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metric
 func getCDMClient() *cdm.CdmClient {
 	return cdm.NewCdmClient(cdm.CdmClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("cdm", "v1.1")).Build())
 }
 

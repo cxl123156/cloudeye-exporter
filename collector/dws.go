@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/config"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	dws "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dws/v2"
 	dwsmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dws/v2/model"
@@ -54,6 +53,6 @@ func (getter DWSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInf
 func getDWSClient() *dws.DwsClient {
 	return dws.NewDwsClient(dws.DwsClientBuilder().WithCredential(
 		basic.NewCredentialsBuilder().WithAk(conf.AccessKey).WithSk(conf.SecretKey).WithProjectId(conf.ProjectID).Build()).
-		WithHttpConfig(config.DefaultHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
+		WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 		WithEndpoint(getEndpoint("dws", "v1.0")).Build())
 }

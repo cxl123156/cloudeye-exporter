@@ -2,32 +2,55 @@
   "__inputs": [
     {
       "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
+      "label": "prometheus",
       "description": "",
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
     }
   ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.4.1"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "links": [
-    {
-      "asDropdown": true,
-      "icon": "external link",
-      "includeVars": false,
-      "keepTime": false,
-      "tags": [],
-      "targetBlank": true,
-      "title": "",
-      "tooltip": "",
-      "type": "dashboards",
-      "url": ""
-    }
-  ],
-  "liveNow": false,
+  "links": [],
   "panels": [
     {
       "collapsed": false,
@@ -37,13 +60,16 @@
         "x": 0,
         "y": 0
       },
-      "id": 15,
+      "id": 7,
       "panels": [],
-      "title": "DDOS-AAD高防实例",
+      "title": "日志分组指标",
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -72,7 +98,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -81,6 +107,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -94,7 +121,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "rowsps"
         },
         "overrides": []
       },
@@ -104,16 +132,11 @@
         "x": 0,
         "y": 1
       },
-      "id": 14,
+      "id": 6,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -124,118 +147,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_service_bandwidth_usage{instance_id=~\".+\"}",
-          "interval": "",
-          "legendFormat": "{{name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "业务带宽利用率",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 6,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_internet_in_rate{instance_id=~\".+\"}",
-          "hide": false,
+          "expr": "huaweicloud_sys_lts_written_rows{log_stream_id=\"\"}",
           "instant": false,
-          "interval": "",
-          "legendFormat": "{{name}} unit: {{unit}}",
-          "refId": "B"
+          "legendFormat": "{{log_group_name}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "title": "入带宽",
+      "title": "写入行数",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -264,7 +195,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -273,6 +204,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -286,26 +218,22 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "Bps"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 9
+        "x": 12,
+        "y": 1
       },
-      "id": 12,
+      "id": 5,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -316,21 +244,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_concurrent_connection{instance_id=~\".+\"}",
-          "interval": "",
-          "legendFormat": "{{name}}",
+          "expr": "huaweicloud_sys_lts_write_traffic{log_stream_id=\"\"}",
+          "instant": false,
+          "legendFormat": "{{log_group_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "并发连接数",
+      "title": "写入流量",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -353,13 +286,13 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -368,6 +301,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -382,26 +316,21 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "bytes"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 9
       },
       "id": 4,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -412,21 +341,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_drop_rate{instance_id=~\".+\"}",
+          "expr": "huaweicloud_sys_lts_used_storage{log_stream_id=\"\"}",
           "instant": false,
-          "interval": "",
-          "legendFormat": "{{name}}",
+          "legendFormat": "{{log_group_name}}",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "攻击带宽",
+      "title": "存储量",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -449,13 +383,110 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "huaweicloud_sys_lts_indexing_traffic{log_stream_id=\"\"}",
+          "instant": false,
+          "legendFormat": "{{log_group_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "索引流量",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -478,7 +509,7 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "none"
         },
         "overrides": []
       },
@@ -488,16 +519,11 @@
         "x": 0,
         "y": 17
       },
-      "id": 10,
+      "id": 2,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -508,21 +534,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_back_to_source_rate{instance_id=~\".+\"}",
-          "interval": "",
-          "legendFormat": "{{name}}",
+          "expr": "huaweicloud_sys_lts_number_of_reads{log_stream_id=\"\"}",
+          "instant": false,
+          "legendFormat": "{{log_group_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "回源带宽",
+      "title": "读取次数",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -545,13 +576,13 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -560,6 +591,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -573,7 +605,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "Bps"
         },
         "overrides": []
       },
@@ -583,16 +616,11 @@
         "x": 12,
         "y": 17
       },
-      "id": 8,
+      "id": 1,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -603,17 +631,19 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_new_connection{instance_id=~\".+\"}",
-          "interval": "",
-          "legendFormat": "{{name}}",
+          "expr": "huaweicloud_sys_lts_read_traffic{log_stream_id=\"\"}",
+          "instant": false,
+          "legendFormat": "{{log_group_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "新建连接",
+      "title": "读取流量（字节）",
       "type": "timeseries"
     },
     {
@@ -624,13 +654,16 @@
         "x": 0,
         "y": 25
       },
-      "id": 16,
+      "id": 8,
       "panels": [],
-      "title": "DDOS-CNAD防护包",
+      "title": "日志流指标",
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -659,7 +692,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -668,6 +701,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -681,7 +715,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "rowsps"
         },
         "overrides": []
       },
@@ -691,16 +726,11 @@
         "x": 0,
         "y": 26
       },
-      "id": 19,
+      "id": 9,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -711,21 +741,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_concurrent_connection{package=~\".+\"}",
-          "interval": "",
-          "legendFormat": "{{name}}",
+          "expr": "huaweicloud_sys_lts_written_rows{log_stream_id!=\"\"}",
+          "instant": false,
+          "legendFormat": "{{log_group_name}}>{{log_stream_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "并发连接数",
+      "title": "写入行数（日志流）",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -739,7 +774,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 6,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -748,13 +783,13 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -763,6 +798,7 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -777,7 +813,7 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "Bps"
         },
         "overrides": []
       },
@@ -787,16 +823,11 @@
         "x": 12,
         "y": 26
       },
-      "id": 18,
+      "id": 10,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -807,22 +838,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_internet_in_rate{package=~\".+\"}",
-          "hide": false,
+          "expr": "huaweicloud_sys_lts_write_traffic{log_stream_id!=\"\"}",
           "instant": false,
-          "interval": "",
-          "legendFormat": "{{name}} unit: {{unit}}",
-          "refId": "B"
+          "legendFormat": "{{log_group_name}}>{{log_stream_name}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "title": "入带宽",
+      "title": "写入流量（日志流）",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -845,13 +880,13 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -860,13 +895,13 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -874,7 +909,7 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -884,16 +919,11 @@
         "x": 0,
         "y": 34
       },
-      "id": 21,
+      "id": 11,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -904,21 +934,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_back_to_source_rate{package=~\".+\"}",
-          "interval": "",
-          "legendFormat": "{{name}}",
+          "expr": "huaweicloud_sys_lts_used_storage{log_stream_id!=\"\"}",
+          "instant": false,
+          "legendFormat": "{{log_group_name}}>{{log_stream_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "回源带宽",
+      "title": "存储量（日志流）",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -941,13 +976,13 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -956,13 +991,13 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -970,7 +1005,7 @@
               }
             ]
           },
-          "unit": "bps"
+          "unit": "Bps"
         },
         "overrides": []
       },
@@ -980,16 +1015,11 @@
         "x": 12,
         "y": 34
       },
-      "id": 20,
+      "id": 12,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1000,21 +1030,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_drop_rate{package=~\".+\"}",
+          "expr": "huaweicloud_sys_lts_indexing_traffic{log_stream_id!=\"\"}",
           "instant": false,
-          "interval": "",
-          "legendFormat": "{{name}}",
+          "legendFormat": "{{log_group_name}}>{{log_stream_name}}",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "攻击带宽",
+      "title": "索引流量（日志流）",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1037,13 +1072,13 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1057,15 +1092,15 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -1075,16 +1110,11 @@
         "x": 0,
         "y": 42
       },
-      "id": 22,
+      "id": 13,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1095,131 +1125,26 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_ddos_instance_new_connection{package=~\".+\"}",
-          "interval": "",
-          "legendFormat": "{{name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "新建连接",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 50
-      },
-      "id": 23,
-      "panels": [],
-      "title": "DDOS-CNAD防护IP",
-      "type": "row"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "该指标为高防IP攻击带宽。",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "KBs"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 51
-      },
-      "id": 24,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_ddos_ip_drop_rate{package_name=~\".+\"}",
+          "expr": "huaweicloud_sys_lts_number_of_reads{log_stream_id!=\"\"}",
           "instant": false,
-          "legendFormat": "防护包名：{{package_name}}，ip：{{ip_address}}",
+          "legendFormat": "{{log_group_name}}>{{log_stream_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "攻击带宽",
+      "title": "读取次数（日志流）",
       "type": "timeseries"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "该指标为高防IP业务带宽。",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1248,7 +1173,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -1257,13 +1182,13 @@
               "mode": "off"
             }
           },
+          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1271,7 +1196,7 @@
               }
             ]
           },
-          "unit": "KBs"
+          "unit": "Bps"
         },
         "overrides": []
       },
@@ -1279,18 +1204,13 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 51
+        "y": 42
       },
-      "id": 25,
+      "id": 14,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
+          "calcs": [],
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
@@ -1301,321 +1221,35 @@
       },
       "targets": [
         {
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "editorMode": "code",
-          "expr": "huaweicloud_sys_ddos_ip_back_to_source_rate{package_name=~\".+\"}",
+          "expr": "huaweicloud_sys_lts_read_traffic{log_stream_id!=\"\"}",
           "instant": false,
-          "legendFormat": "防护包名：{{package_name}}，ip：{{ip_address}}",
+          "legendFormat": "{{log_group_name}}>{{log_stream_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "业务带宽",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "该指标为高防IP入带宽。",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "KBs"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 59
-      },
-      "id": 26,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_ddos_ip_internet_in_rate{package_name=~\".+\"}",
-          "instant": false,
-          "legendFormat": "防护包名：{{package_name}}，ip：{{ip_address}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "入带宽",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "该指标为高防IP新建连接数。",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 59
-      },
-      "id": 27,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_ddos_ip_new_connection{package_name=~\".+\"}",
-          "instant": false,
-          "legendFormat": "防护包名：{{package_name}}，ip：{{ip_address}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "新建连接",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "该指标为高防IP并发连接数。",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 67
-      },
-      "id": 28,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_ddos_ip_concurrent_connection{package_name=~\".+\"}",
-          "instant": false,
-          "legendFormat": "防护包名：{{package_name}}，ip：{{ip_address}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "并发连接",
+      "title": "读取流量（日志流）",
       "type": "timeseries"
     }
   ],
-  "refresh": "",
-  "schemaVersion": 38,
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "",
-  "title": "DDOS高防",
-  "uid": "CKR6ZzJSk",
-  "version": 2,
+  "timezone": "browser",
+  "title": "云日志服务（LTS）",
+  "uid": "cdxdrwju69hq8d",
+  "version": 1,
   "weekStart": ""
 }

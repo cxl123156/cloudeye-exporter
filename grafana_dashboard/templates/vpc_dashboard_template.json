@@ -1,32 +1,63 @@
 {
   "__inputs": [
     {
-      "name": "prometheus-cloudeye-exporter",
-      "label": "prometheus-cloudeye-exporter",
-      "description": "prometheus plugin that obtains data from cloudeye exporter for grafana",
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
       "type": "datasource",
       "pluginId": "prometheus",
-      "pluginName": "prometheus"
+      "pluginName": "Prometheus"
     }
   ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.2.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
   "description": "【华为云VPC监控指标说明】https://support.huaweicloud.com/intl/zh-cn/usermanual-vpc/vpc010012.html",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": 8919,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1660535145197,
-  "links": [
-    {
-      "$$hashKey": "object:2302",
-      "asDropdown": true,
-      "icon": "external link",
-      "tags": [],
-      "targetBlank": true,
-      "title": "",
-      "type": "dashboards"
-    }
-  ],
+  "id": null,
+  "links": [],
   "liveNow": false,
   "panels": [
     {
@@ -37,292 +68,439 @@
         "x": 0,
         "y": 0
       },
-      "id": 194,
+      "id": 2,
       "panels": [],
       "repeat": "EPS",
-      "title": "带宽 资源总览（企业项目）企业项目：$EPS",
+      "repeatDirection": "h",
+      "title": "带宽 资源总览 企业项目：$EPS",
       "type": "row"
     },
     {
-      "columns": [],
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "description": "",
-      "fontSize": "80%",
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "计费模式"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "bandwidth": {
+                        "index": 0,
+                        "text": "按带宽"
+                      },
+                      "traffic": {
+                        "index": 1,
+                        "text": "按流量"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "入网带宽"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binbps"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 5242880
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "入网带宽使用率"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 50
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "入网流量"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bits"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 10485760
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 52428800
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "出网带宽"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binbps"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 5242880
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "出网带宽使用率"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 50
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "出网流量"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bits"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 10485760
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 52428800
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 1
       },
-      "id": 185,
-      "showHeader": true,
-      "sort": {
-        "col": 14,
-        "desc": true
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
       },
-      "styles": [
-        {
-          "$$hashKey": "object:1808",
-          "alias": "带宽名称",
-          "align": "auto",
-          "colors": [
-            "#37872D",
-            "#FA6400",
-            "#C4162A"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 1,
-          "link": false,
-          "linkTooltip": "",
-          "linkUrl": "",
-          "mappingType": 1,
-          "pattern": "name",
-          "thresholds": [
-            ""
-          ],
-          "type": "string",
-          "unit": "bytes"
-        },
-        {
-          "$$hashKey": "object:1809",
-          "alias": "带宽ID",
-          "align": "auto",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": false,
-          "linkTargetBlank": false,
-          "linkTooltip": "浏览主机明细",
-          "linkUrl": "",
-          "mappingType": 1,
-          "pattern": "bandwidth_id",
-          "thresholds": [
-            ""
-          ],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "$$hashKey": "object:1810",
-          "alias": "入网带宽 ",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "link": false,
-          "mappingType": 1,
-          "pattern": "Value #A",
-          "thresholds": [
-            "5242880",
-            "10485760"
-          ],
-          "type": "number",
-          "unit": "binbps"
-        },
-        {
-          "$$hashKey": "object:1814",
-          "alias": "入网带宽使用率",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #B",
-          "thresholds": [
-            "50",
-            "80"
-          ],
-          "type": "number",
-          "unit": "percent"
-        },
-        {
-          "$$hashKey": "object:1815",
-          "alias": "入网流量",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value #C",
-          "thresholds": [
-            "10485760",
-            "52428800"
-          ],
-          "type": "number",
-          "unit": "bytes"
-        },
-        {
-          "$$hashKey": "object:1816",
-          "alias": "出网带宽",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value #D",
-          "thresholds": [
-            "5242880",
-            "10485760"
-          ],
-          "type": "number",
-          "unit": "binBps"
-        },
-        {
-          "$$hashKey": "object:1817",
-          "alias": "出网带宽使用率",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #E",
-          "thresholds": [
-            "50",
-            "80"
-          ],
-          "type": "number",
-          "unit": "percent"
-        },
-        {
-          "$$hashKey": "object:3937",
-          "alias": "出网流量",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #F",
-          "thresholds": [
-            "10485760",
-            "52428800"
-          ],
-          "type": "number",
-          "unit": "bytes"
-        },
-        {
-          "$$hashKey": "object:750",
-          "alias": "",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        }
-      ],
+      "pluginVersion": "10.2.0",
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\"}) by (name,bandwidth_id)",
+          "expr": "huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "format": "table",
-          "hide": false,
           "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "入网带宽",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "A"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\"}) by (name,bandwidth_id)",
+          "expr": "huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "入网使用率",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "B"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress=~\"\"}) by (name,bandwidth_id)",
+          "expr": "huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "入网流量",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "C"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\"}) by (name,bandwidth_id)",
+          "expr": "huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "出网带宽",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "D"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\"}) by (name,bandwidth_id)",
+          "expr": "huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "出网带宽使用率",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "E"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress=~\"\"}) by (name,bandwidth_id)",
+          "expr": "huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "出网流量",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "F"
         }
       ],
       "title": "带宽资源总览表【企业项目：$EPS】",
-      "transform": "table",
-      "type": "table-old"
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "bandwidth_id",
+                "chargeMode",
+                "name",
+                "Value #A",
+                "Value #B",
+                "Value #C",
+                "Value #D",
+                "Value #E",
+                "Value #F",
+                "bandwidthType"
+              ]
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Value #A": "入网带宽",
+              "Value #B": "入网带宽使用率",
+              "Value #C": "入网流量",
+              "Value #D": "出网带宽",
+              "Value #E": "出网带宽使用率",
+              "Value #F": "出网流量",
+              "bandwidthType": "带宽类型",
+              "bandwidth_id": "带宽ID",
+              "chargeMode": "计费模式",
+              "name": "带宽名称"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "collapsed": false,
@@ -330,739 +508,584 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 9
       },
-      "id": 192,
+      "id": 3,
       "panels": [],
       "repeat": "EPS",
-      "title": "带宽 资源详情（企业项目）企业项目：$EPS",
+      "repeatDirection": "h",
+      "title": "带宽 资源详情 企业项目：$EPS",
       "type": "row"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
-          "unit": "binBps"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binbps"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 8,
         "x": 0,
-        "y": 9
+        "y": 10
       },
-      "hiddenSeries": false,
-      "id": 196,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 4,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "带宽名称：{{name}}，计费模式：{{chargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "入网带宽",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "binBps",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
           "unit": "percent"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 8,
         "x": 8,
-        "y": 9
+        "y": 10
       },
-      "hiddenSeries": false,
-      "id": 202,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 5,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "带宽名称：{{name}}，计费模式：{{chargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "入网带宽使用率",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "percent",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
-          "unit": "bytes"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bits"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 8,
         "x": 16,
-        "y": 9
+        "y": 10
       },
-      "hiddenSeries": false,
-      "id": 198,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 6,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress=~\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "带宽名称：{{name}}，计费模式：{{chargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "入网流量",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "bytes",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
           "unit": "binbps"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 8,
         "x": 0,
-        "y": 17
+        "y": 19
       },
-      "hiddenSeries": false,
-      "id": 200,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 7,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "带宽名称：{{name}}，计费模式：{{chargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "出网带宽",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "binbps",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
           "unit": "percent"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 8,
         "x": 8,
-        "y": 17
+        "y": 19
       },
-      "hiddenSeries": false,
-      "id": 199,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 8,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "带宽名称：{{name}}，计费模式：{{chargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "出网带宽使用率",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "percent",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
-          "unit": "bytes"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bits"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 8,
         "x": 16,
-        "y": 17
+        "y": 19
       },
-      "hiddenSeries": false,
-      "id": 201,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 9,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress=~\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress=~\"\", chargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "带宽名称：{{name}}，计费模式：{{chargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "出网流量",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "bytes",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -1070,1046 +1093,1064 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 28
       },
-      "id": 190,
+      "id": 10,
       "panels": [],
       "repeat": "EPS",
-      "title": "弹性公网IP 资源总览（企业项目）企业项目：$EPS",
+      "repeatDirection": "h",
+      "title": "弹性公网IP 资源总览 企业项目：$EPS",
       "type": "row"
     },
     {
-      "columns": [],
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "description": "",
-      "fontSize": "80%",
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "入网带宽"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "binbps"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 5242880
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "入网使用率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 50
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "入网流量"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bits"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 10485760
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 52428800
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "出网带宽"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binbps"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 5242880
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 10485760
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "出网使用率"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 50
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "出网流量"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bits"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 10485760
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 52428800
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "计费模式"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "bandwidth": {
+                        "index": 0,
+                        "text": "按带宽"
+                      },
+                      "traffic": {
+                        "index": 1,
+                        "text": "按流量"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 29
       },
-      "id": 188,
-      "showHeader": true,
-      "sort": {
-        "col": 3,
-        "desc": true
+      "id": 11,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "出网使用率"
+          }
+        ]
       },
-      "styles": [
-        {
-          "$$hashKey": "object:1808",
-          "alias": "IP",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 1,
-          "link": false,
-          "linkTooltip": "",
-          "linkUrl": "",
-          "mappingType": 1,
-          "pattern": "name",
-          "thresholds": [],
-          "type": "string",
-          "unit": "bytes"
-        },
-        {
-          "$$hashKey": "object:1809",
-          "alias": "弹性公网IP ID",
-          "align": "auto",
-          "colors": [
-            "#37872D",
-            "#FA6400",
-            "#C4162A"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": false,
-          "linkTargetBlank": false,
-          "linkTooltip": "浏览主机明细",
-          "linkUrl": "",
-          "mappingType": 1,
-          "pattern": "publicip_id",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "$$hashKey": "object:1810",
-          "alias": "入网带宽",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": false,
-          "mappingType": 1,
-          "pattern": "Value #A",
-          "thresholds": [
-            "5242880",
-            "10485760"
-          ],
-          "type": "number",
-          "unit": "binbps"
-        },
-        {
-          "$$hashKey": "object:1814",
-          "alias": "入网使用率",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #B",
-          "thresholds": [
-            "50",
-            "80"
-          ],
-          "type": "number",
-          "unit": "percent"
-        },
-        {
-          "$$hashKey": "object:1815",
-          "alias": "入网流量",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #C",
-          "thresholds": [
-            "10485760",
-            "52428800"
-          ],
-          "type": "number",
-          "unit": "bytes"
-        },
-        {
-          "$$hashKey": "object:1816",
-          "alias": "出网带宽",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #D",
-          "thresholds": [
-            "5242880",
-            "10485760"
-          ],
-          "type": "number",
-          "unit": "binBps"
-        },
-        {
-          "$$hashKey": "object:1817",
-          "alias": "出网带宽使用率",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "rgba(50, 172, 45, 0.97)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #E",
-          "thresholds": [
-            "50",
-            "80"
-          ],
-          "type": "number",
-          "unit": "percent"
-        },
-        {
-          "$$hashKey": "object:3937",
-          "alias": "出网流量",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "#37872D",
-            "#FA6400",
-            "#C4162A"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #F",
-          "thresholds": [
-            "10485760",
-            "52428800"
-          ],
-          "type": "number",
-          "unit": "bytes"
-        },
-        {
-          "$$hashKey": "object:750",
-          "alias": "",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        }
-      ],
+      "pluginVersion": "10.2.0",
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id)",
+          "expr": "avg(huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id,bandwidthChargeMode)",
           "format": "table",
-          "hide": false,
           "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "入网带宽",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "A"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id)",
+          "expr": "avg(huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id,bandwidthChargeMode)",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "入网使用率",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "B"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id)",
+          "expr": "avg(huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id,bandwidthChargeMode)",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "入网流量",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "C"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id)",
+          "expr": "avg(huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id,bandwidthChargeMode)",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "出网带宽",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "D"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id)",
+          "expr": "avg(huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id,bandwidthChargeMode)",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "出网带宽使用率",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "E"
         },
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id)",
+          "expr": "avg(huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress!=\"\"}) by (name,publicip_id,bandwidthChargeMode)",
           "format": "table",
           "hide": false,
           "instant": true,
-          "interval": "",
-          "legendFormat": "出网流量",
+          "legendFormat": "__auto",
+          "range": false,
           "refId": "F"
         }
       ],
       "title": "弹性公网IP资源总览表【企业项目：$EPS】",
-      "transform": "table",
-      "type": "table-old"
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "bandwidthChargeMode",
+                "publicip_id",
+                "Value #A",
+                "Value #B",
+                "Value #C",
+                "Value #D",
+                "Value #E",
+                "Value #F",
+                "name"
+              ]
+            }
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "Value #A": 3,
+              "Value #B": 4,
+              "Value #C": 5,
+              "Value #D": 6,
+              "Value #E": 7,
+              "Value #F": 8,
+              "bandwidthChargeMode": 1,
+              "name": 0,
+              "publicip_id": 2
+            },
+            "renameByName": {
+              "Value #A": "入网带宽",
+              "Value #B": "入网使用率",
+              "Value #C": "入网流量",
+              "Value #D": "出网带宽",
+              "Value #E": "出网使用率",
+              "Value #F": "出网流量",
+              "bandwidthChargeMode": "计费模式",
+              "name": "IP",
+              "publicip_id": "弹性公网IP ID"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "collapsed": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 37
       },
-      "id": 187,
+      "id": 12,
       "panels": [],
       "repeat": "EPS",
-      "title": "弹性公网IP 详情 业项目：$EPS",
+      "repeatDirection": "h",
+      "title": "弹性公网IP详情 企业项目：$EPS",
       "type": "row"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
-          "unit": "binBps"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binbps"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 8,
         "x": 0,
-        "y": 37
+        "y": 38
       },
-      "hiddenSeries": false,
-      "id": 204,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "min",
-        "sortDesc": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 13,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_downstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\", bandwidthChargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "IP：{{name}}，计费模式：{{bandwidthChargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "入网带宽",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "binBps",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
           "unit": "percent"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 8,
         "x": 8,
-        "y": 37
+        "y": 38
       },
-      "hiddenSeries": false,
-      "id": 205,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 14,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_downstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\",bandwidthChargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "IP：{{name}}，计费模式：{{bandwidthChargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "入网带宽使用率",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "percent",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
-          "unit": "bytes"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bits"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 8,
         "x": 16,
-        "y": 37
+        "y": 38
       },
-      "hiddenSeries": false,
-      "id": 206,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 15,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress!=\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_down_stream{epId=~\"$EPS\",publicIpAddress!=\"\",bandwidthChargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "IP：{{name}}，计费模式：{{bandwidthChargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "入网流量",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "bytes",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
-          "unit": "binBps"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binbps"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 8,
         "x": 0,
         "y": 46
       },
-      "hiddenSeries": false,
-      "id": 207,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "min",
-        "sortDesc": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 16,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_upstream_bandwidth{epId=~\"$EPS\",publicIpAddress!=\"\", bandwidthChargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "IP：{{name}}，计费模式：{{bandwidthChargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "出网带宽",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "binBps",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
           "unit": "percent"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 8,
         "x": 8,
         "y": 46
       },
-      "hiddenSeries": false,
-      "id": 208,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 17,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_upstream_bandwidth_usage{epId=~\"$EPS\",publicIpAddress!=\"\",bandwidthChargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "IP：{{name}}，计费模式：{{bandwidthChargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "出网带宽使用率",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "percent",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {
-        "192.168.200.241:9100_Total": "dark-red",
-        "Idle - Waiting for something to happen": "#052B51",
-        "guest": "#9AC48A",
-        "idle": "#052B51",
-        "iowait": "#EAB839",
-        "irq": "#BF1B00",
-        "nice": "#C15C17",
-        "sdb_每秒I/O操作%": "#d683ce",
-        "softirq": "#E24D42",
-        "steal": "#FCE2DE",
-        "system": "#508642",
-        "user": "#5195CE",
-        "磁盘花费在I/O操作占比": "#ba43a9"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${prometheus-cloudeye-exporter}",
-      "decimals": 2,
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
-          "links": [],
-          "unit": "bytes"
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bits"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 8,
         "x": 16,
         "y": 46
       },
-      "hiddenSeries": false,
-      "id": 209,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
+      "id": 18,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.5.3",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress!=\"\"}",
-          "format": "time_series",
-          "hide": false,
+          "expr": "huaweicloud_sys_vpc_up_stream{epId=~\"$EPS\",publicIpAddress!=\"\",bandwidthChargeMode=~\"$ChargeMode\"}",
           "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{name}}",
-          "refId": "A",
-          "step": 20
+          "legendFormat": "IP：{{name}}，计费模式：{{bandwidthChargeMode}}",
+          "range": true,
+          "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "出网流量",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:11294",
-          "decimals": 0,
-          "format": "bytes",
-          "label": "",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:11295",
-          "format": "short",
-          "logBase": 1,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "timeseries"
     }
   ],
-  "refresh": "15s",
-  "schemaVersion": 36,
-  "style": "dark",
+  "refresh": "",
+  "schemaVersion": 38,
   "tags": [],
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": true,
-          "text": "default",
-          "value": "0"
-        },
-        "datasource": "${prometheus-cloudeye-exporter}",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "huaweicloud_epinfo",
         "hide": 0,
         "includeAll": false,
@@ -2118,47 +2159,63 @@
         "name": "EPS",
         "options": [],
         "query": {
+          "qryType": 4,
           "query": "huaweicloud_epinfo",
-          "refId": "StandardVariableQuery"
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
         "regex": "/epName=\"(?<text>[^\"]+)|epId=\"(?<value>[^\"]+)/g",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "按带宽"
+          ],
+          "value": [
+            "bandwidth"
+          ]
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "计费模式",
+        "multi": true,
+        "name": "ChargeMode",
+        "options": [
+          {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": true,
+            "text": "按带宽",
+            "value": "bandwidth"
+          },
+          {
+            "selected": false,
+            "text": "按流量",
+            "value": "traffic"
+          }
+        ],
+        "query": "按带宽 : bandwidth , 按流量 : traffic",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-3h",
     "to": "now"
   },
-  "timepicker": {
-    "hidden": false,
-    "now": true,
-    "refresh_intervals": [
-      "15s",
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m"
-    ],
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
-    ]
-  },
-  "timezone": "browser",
+  "timepicker": {},
+  "timezone": "",
   "title": "弹性公网IP和带宽(VPC)",
-  "uid": "6557F0m4k",
-  "version": 32,
+  "uid": "dfa72048-c799-4fdc-adfa-36b472b981a5",
+  "version": 3,
   "weekStart": ""
 }

@@ -2,35 +2,24 @@
   "__inputs": [
     {
       "name": "DS_PROMETHEUS",
-      "label": "prometheus",
+      "label": "Prometheus",
       "description": "",
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
     }
   ],
+  "__elements": {},
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 2,
-      "panels": [],
-      "title": "云原生应用网络指标",
-      "type": "row"
-    },
-    {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "跨区域流入本区域的带宽。",
+      "description": "统计测量对象的CPU使用率",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -54,12 +43,12 @@
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 2,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -82,7 +71,7 @@
               }
             ]
           },
-          "unit": "binbps"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -90,7 +79,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 0
       },
       "id": 1,
       "options": {
@@ -114,19 +103,19 @@
         {
           "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_network_incoming_bits_rate{}",
+          "expr": "huaweicloud_sys_cloudtable_cmdProcessCPU{clusterName=~\"$ClusterName\"}",
           "instant": false,
-          "legendFormat": "anc资源名：{{name}}",
+          "legendFormat": "集群名称：{{clusterName}}；节点名称：{{instance_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "入方向带宽",
+      "title": "CPU使用率（节点）",
       "type": "timeseries"
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "当前云原生应用网络的出方向带宽。",
+      "description": "统计测量对象的内存使用率",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -150,12 +139,12 @@
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 2,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -178,7 +167,7 @@
               }
             ]
           },
-          "unit": "binbps"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -186,7 +175,103 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": "${DS_PROMETHEUS}",
+          "editorMode": "code",
+          "expr": "huaweicloud_sys_cloudtable_cmdProcessMem{clusterName=~\"$ClusterName\"}",
+          "instant": false,
+          "legendFormat": "集群名称：{{clusterName}}；节点名称：{{instance_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "内存使用率（节点）",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "${DS_PROMETHEUS}",
+      "description": "统计测量对象所在集群的已用存储空间大小占总配额的比率",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
       },
       "id": 3,
       "options": {
@@ -210,19 +295,19 @@
         {
           "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_network_outgoing_bits_rate{}",
+          "expr": "huaweicloud_sys_cloudtable_cmdForUsedStorageRate{clusterName=~\"$ClusterName\"}",
           "instant": false,
-          "legendFormat": "anc资源名：{{name}}",
+          "legendFormat": "集群名称：{{clusterName}}；节点名称：{{instance_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "出方向带宽",
+      "title": "已用存储空间比率（节点）",
       "type": "timeseries"
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "跨区域流入本区域的流量。",
+      "description": "统计测量对象所在集群的已用存储空间大小占总配额的比率",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -246,12 +331,12 @@
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 2,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -274,15 +359,15 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "percent"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 9
+        "x": 12,
+        "y": 8
       },
       "id": 4,
       "options": {
@@ -306,19 +391,19 @@
         {
           "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_network_incoming_packets_rate{}",
+          "expr": "huaweicloud_sys_cloudtable_cmdForUsedStorageRate{clusterName=~\"$ClusterName\"}",
           "instant": false,
-          "legendFormat": "anc资源名：{{name}}",
+          "legendFormat": "集群名称：{{clusterName}}；节点名称：{{instance_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "入方向流量",
+      "title": "已用存储空间比率（节点）",
       "type": "timeseries"
     },
     {
       "datasource": "${DS_PROMETHEUS}",
-      "description": "跨区域流出本区域的流量。",
+      "description": "磁盘读取吞吐速率。",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -342,12 +427,12 @@
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 2,
+            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -370,15 +455,15 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "binBps"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 9
+        "x": 0,
+        "y": 16
       },
       "id": 5,
       "options": {
@@ -402,93 +487,81 @@
         {
           "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_network_outgoing_packets_rate{}",
+          "expr": "huaweicloud_sys_cloudtable_disk_throughput_read_rate{clusterName=~\"$ClusterName\"}",
           "instant": false,
-          "legendFormat": "anc资源名：{{name}}",
+          "legendFormat": "集群名称：{{clusterName}}；节点名称：{{instance_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "出方向流量",
+      "title": "磁盘吞吐读速率（节点）",
       "type": "timeseries"
     },
     {
-      "collapsed": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "description": "磁盘写入吞吐速率。",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 17
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
       },
       "id": 6,
-      "panels": [],
-      "title": "云原生应用网络服务指标",
-      "type": "row"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "引流到当前服务的流量。",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 2,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 18
-      },
-      "id": 7,
       "options": {
         "legend": {
           "calcs": [
@@ -510,423 +583,53 @@
         {
           "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_service_inbound_traffic{anc_service_id=~\".+\", anc_serviceregion_id!~\".+\"}",
+          "expr": "huaweicloud_sys_cloudtable_disk_throughput_write_rate{clusterName=~\"$ClusterName\"}",
           "instant": false,
-          "legendFormat": "服务名称：{{name}}",
+          "legendFormat": "集群名称：{{clusterName}}；节点名称：{{instance_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "服务入方向流量",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "从当前服务流出的流量。",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 2,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 18
-      },
-      "id": 8,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_service_outbound_traffic{anc_service_id=~\".+\", anc_serviceregion_id!~\".+\"}",
-          "instant": false,
-          "legendFormat": "服务名称：{{name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "服务出方向流量",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 26
-      },
-      "id": 9,
-      "panels": [],
-      "title": "云原生应用网络成员组指标",
-      "type": "row"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "本成员组的全部成员数",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 2,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 27
-      },
-      "id": 10,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_total_server_count{}",
-          "instant": false,
-          "legendFormat": "成员组名：{{name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "全部成员数",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "本成员组的正常成员数",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 2,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 27
-      },
-      "id": 11,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_healthy_server_count{}",
-          "instant": false,
-          "legendFormat": "成员组名：{{name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "正常成员数",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "本成员组的异常成员数",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 2,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 35
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull",
-            "min",
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": "${DS_PROMETHEUS}",
-          "editorMode": "code",
-          "expr": "huaweicloud_sys_anc_unhealthy_server_count{}",
-          "instant": false,
-          "legendFormat": "成员组名：{{name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "异常成员数",
+      "title": "磁盘吞吐写速率（节点）",
       "type": "timeseries"
     }
   ],
-  "schemaVersion": 39,
+  "refresh": "",
+  "schemaVersion": 38,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
+        "definition": "label_values(clusterName)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "集群名称",
+        "multi": false,
+        "name": "ClusterName",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(clusterName)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "browser",
-  "title": "云原生应用网络（ANC）",
-  "uid": "adwuy9u77bnr4e",
-  "version": 2,
+  "timezone": "",
+  "title": "表格存储服务（CloudTable）",
+  "uid": "c8e4c35d-d418-41f1-b931-785c5dcb5f66",
+  "version": 1,
   "weekStart": ""
 }

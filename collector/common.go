@@ -17,8 +17,13 @@ func GetHttpConfig() *config.HttpConfig {
 		Port:   global.HttpPort,
 	}
 	if isUserInfoValid() {
-		proxy.Username = global.UserName
-		proxy.Password = global.Password
+		if ProxyEnabled {
+			proxy.Username = TmpProxyUserName
+			proxy.Password = TmpProxyPassword
+		} else {
+			proxy.Username = global.UserName
+			proxy.Password = global.Password
+		}
 	}
 	httpConfig.HttpProxy = &proxy
 	return httpConfig

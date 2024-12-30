@@ -59,6 +59,8 @@ func listResources(provider, resourceType string, optionalRegionID ...string) ([
 
 func getResourcesFromRMS(req *model.ListResourcesRequest) ([]model.ResourceEntity, error) {
 	var resources []model.ResourceEntity
+	// 多EPID下，保证每个EPID查询开始时，Marker都是初始值
+	req.Marker = nil
 	for {
 		response, err := getRMSClient().ListResources(req)
 		if err != nil {

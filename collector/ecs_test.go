@@ -32,7 +32,7 @@ func TestECSInfo_GetResourceInfo(t *testing.T) {
 			IP: "192.168.20.53,100.93.4.203",
 		},
 	}, nil)
-	patches.ApplyFunc(loadAgentDimensions, func(instanceID string) {})
+	patches.ApplyFunc(loadAgentDimensions, func(instanceID string) error { return nil })
 	defer patches.Reset()
 	ecsInfo1 := ECSInfo{}
 	_, filterMetrics := ecsInfo1.GetResourceInfo()

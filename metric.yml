@@ -2724,3 +2724,13 @@ SYS.EG:
       - sub_retry_rate
       - sub_success_num
       - sub_retry_num
+SYS.EWP:
+  dim_metric_name:
+    user_id:
+      - total_request_success_rate
+      - site_list_clicks
+      - site_list_request_failed_rate
+      - template_list_clicks
+    site_id:
+      - website_design_clicks
+      - website_design_request_failed_rate

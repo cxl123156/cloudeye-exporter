@@ -41,11 +41,28 @@ func TestGetLabel(t *testing.T) {
 }
 
 func TestGetDimValue(t *testing.T) {
-	assert.Equal(t, "0001-0001-0000001", getDimValue("SYS.ECS", "instance_id", "0001-0001-0000001"))
-	assert.Equal(t, "0001-0001-0000001", getDimValue("AGT.ECS", "instance_id", "0001-0001-0000001"))
-	assert.Equal(t, "000000000000000", getDimValue("AGT.ECS", "disk", "000000000000000"))
+	patches := getPatches()
+	defer patches.Reset()
+	logs.InitLog("")
+	sysECSNamespace := "SYS.ECS"
+	agtECSNamespace := "AGT.ECS"
+	sysECSMetricData := model.BatchMetricData{
+		Namespace: &sysECSNamespace,
+		Dimensions: &[]model.MetricsDimension{
+			{Name: "instance_id", Value: "0001-0001-0000001"},
+		},
+	}
+	agtECSMetricData := model.BatchMetricData{
+		Namespace: &agtECSNamespace,
+		Dimensions: &[]model.MetricsDimension{
+			{Name: "instance_id", Value: "0001-0001-0000001"},
+		},
+	}
+	assert.Equal(t, "0001-0001-0000001", getDimValue(sysECSMetricData, "instance_id", "0001-0001-0000001"))
+	assert.Equal(t, "0001-0001-0000001", getDimValue(agtECSMetricData, "instance_id", "0001-0001-0000001"))
+	assert.Equal(t, "000000000000000", getDimValue(agtECSMetricData, "disk", "000000000000000"))
 	agentDimensions.Store("000000000000000", "vda")
-	assert.Equal(t, "vda", getDimValue("AGT.ECS", "disk", "000000000000000"))
+	assert.Equal(t, "vda", getDimValue(agtECSMetricData, "disk", "000000000000000"))
 }
 
 func TestTransMetric(t *testing.T) {

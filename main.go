@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -19,8 +18,12 @@ var (
 	clientConfig = flag.String("config", "./clouds.yml", "Path to the cloud configuration file")
 	// 安全模式，从用户交互输入获取ak/sk，避免明文ak/sk敏感信息存储在配置文件中
 	securityMod = flag.Bool("s", false, "Get ak sk from command line")
-	getVersion  = flag.Bool("v", false, "Get version from command line")
-	ak, sk      string
+	// 以https协议启动cloudeye-exporter，需要从用户交互输入获取ca证书路径，服务端https证书路径，服务端私钥路径以及私钥密码
+	httpsEnabled = flag.Bool("k", false, "Start the cloudeye exporter service in https mode")
+	getVersion   = flag.Bool("v", false, "Get version from command line")
+	proxyEnabled = flag.Bool("p", false, "Start the cloudeye exporter service and start the proxy")
+
+	ak, sk, proxyUserName, proxyPassword string
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +63,7 @@ func getAkSkFromCommandLine() {
 	if *securityMod {
 		collector.SecurityMod = *securityMod
 		// 用户交互输入ak/sk，避免明文配置敏感信息
-		fmt.Print("Please input ak&sk split with space: (eg: {example_ak example_sk})")
+		fmt.Print("Please input ak&sk split with space(eg: {example_ak example_sk}): \n")
 		_, err := fmt.Scanln(&ak, &sk)
 		if err != nil {
 			fmt.Printf("Read ak sk error: %s", err.Error())
@@ -68,6 +71,27 @@ func getAkSkFromCommandLine() {
 		}
 		collector.TmpAK = ak
 		collector.TmpSK = sk
+	}
+}
+
+func getProxyInfoFromCommandLine() {
+	if *proxyEnabled {
+		collector.ProxyEnabled = *proxyEnabled
+		// 用户交互输入代理userName/password，避免明文配置敏感信息
+		fmt.Print("Please input proxy userName&proxy password split with space(eg: {example_proxy_user_name example_proxy_password}): \n")
+		_, err := fmt.Scanln(&proxyUserName, &proxyPassword)
+		if err != nil {
+			fmt.Printf("Read proxy info error: %s", err.Error())
+			return
+		}
+		collector.TmpProxyUserName = proxyUserName
+		collector.TmpProxyPassword = proxyPassword
+	}
+}
+
+func getHttpsEnabledFromCommandLine() {
+	if *httpsEnabled {
+		collector.HttpsEnabled = *httpsEnabled
 	}
 }
 
@@ -82,20 +106,14 @@ func main() {
 	flag.Parse()
 	getVersionFunc()
 	getAkSkFromCommandLine()
+	getHttpsEnabledFromCommandLine()
+	getProxyInfoFromCommandLine()
 	initConf()
+	initCache()
 
 	http.HandleFunc(collector.CloudConf.Global.MetricPath, handler)
 	http.HandleFunc(collector.CloudConf.Global.EpsInfoPath, epHandler)
-	server := &http.Server{
-		Addr:         collector.CloudConf.Global.Port,
-		ReadTimeout:  30 * time.Second,
-		WriteTimeout: 60 * time.Second,
-	}
-	logs.Logger.Info("Start server at ", collector.CloudConf.Global.Port)
-	if err := server.ListenAndServe(); err != nil {
-		logs.Logger.Errorf("Error occur when start server %s", err.Error())
-		logs.FlushLogAndExit(1)
-	}
+	collector.StartServer()
 }
 
 func initConf() {
@@ -112,4 +130,8 @@ func initConf() {
 		logs.FlushLogAndExit(1)
 	}
 	collector.InitEndpointConfig(collector.CloudConf.Global.EndpointsConfPath)
+}
+
+func initCache() {
+	collector.GetAgentDimensionRefresher().RefreshAgentDimensionWithInterval()
 }

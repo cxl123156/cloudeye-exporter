@@ -24,6 +24,11 @@
    scrape_configs:
      # 如果开启了企业项目，则配置该任务获取企业项目信息，用于模板
      - job_name: 'huaweicloud-eps'
+       scheme: https # 默认该值为http，代表prometheus以http方式调用cloudeye-exporter，如需以https方式调用，请配置值改为https
+       tls_config:   # prometheus以https调用cloudeye-exporter服务时，该参数必配
+         ca_file: root.crt     # 客户端CA证书的路径
+         cert_file: client.crt # 客户端https证书的路径
+         key_file: client.key  # 客户端私钥的路径
        metrics_path: "/eps-info"
        static_configs:
        - targets: ['192.168.0.xx:8087']
@@ -32,15 +37,19 @@
    >> ![import.png](pic/import.jpg)
    >> ![img.png](pic/load.jpg)
    
-   模板文件获取地址: 
+   **当前模板文件基于grafana10.x版本配置，10.x之前版本不再兼容适配，老版模板可使用grafana_dashboard/templates/old_version目录下取用。**
+   
+   **如遇grafana模板不兼容问题请升级grafana版本至10.x以上**
+   
+   **模板文件获取地址如下:**
    + [云搜索服务 CSS](templates/css(es)_dashboard_template.json)
    + [云专线 DCAAS](templates/dcaas_dashboard_template.json)
    + [分布式缓存服务 DCS](templates/dcs_dashboard_template.json)
    + [弹性云服务器 ECS](templates/ecs_dashboard_template.json)
    + [弹性负载均衡 ELB](templates/elb_dashboard_template.json)
    + [关系型数据库 RDS](templates/rds_dashboard_template.json)
-   + [Web应用防火墙 WAF](templates/waf_dashboard_template.json)
-   + [Web应用防火墙 WAF-独享引擎实例](templates/waf_premium_instance_dashboard_template.json)
+   + [Web应用防火墙 WAF](templates/old_version/waf_dashboard_template.json)
+   + [Web应用防火墙 WAF-独享引擎实例](templates/old_version/waf_premium_instance_dashboard_template.json)
    + [弹性公网IP和带宽 VPC](templates/vpc_dashboard_template.json)
    + [云防火墙 CFW](templates/cfw_dashboard_template.json)
    + [分布式消息服务 DMS-kafka](templates/dms(Kafka)_dashboard_template.json)
@@ -70,6 +79,7 @@
    + [事件网格 EG](templates/eg_dashboard_template.json)
    + [对象存储服务 OBS](templates/obs_dashboard_template.json)
    + [云解析服务 DNS](templates/dns_dashboard_template.json)
+   + [企业门户 EWP](templates/ewp_dashboard_template.json)
 4. 效果展示：
    >ECS:
    > ![img.png](pic/ecs.jpg)

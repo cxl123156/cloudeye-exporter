@@ -134,15 +134,15 @@ func getDimLabel(metric model.BatchMetricData) labelInfo {
 	var label labelInfo
 	for _, dim := range *metric.Dimensions {
 		label.Name = append(label.Name, strings.ReplaceAll(dim.Name, "-", "_"))
-		label.Value = append(label.Value, getDimValue(*metric.Namespace, dim.Name, dim.Value))
+		label.Value = append(label.Value, getDimValue(metric, dim.Name, dim.Value))
 	}
 	label.Name = append(label.Name, "unit")
 	label.Value = append(label.Value, *metric.Unit)
 	return label
 }
 
-func getDimValue(namespaces, dimName, dimValue string) string {
-	if !isContainsInStringArr(namespaces, []string{"AGT.ECS", "SERVICE.BMS"}) {
+func getDimValue(metricData model.BatchMetricData, dimName, dimValue string) string {
+	if !isContainsInStringArr(*metricData.Namespace, []string{"AGT.ECS", "SERVICE.BMS"}) {
 		return dimValue
 	}
 
@@ -150,7 +150,12 @@ func getDimValue(namespaces, dimName, dimValue string) string {
 		return dimValue
 	}
 
-	return getAgentOriginValue(dimValue)
+	instanceID := getServerResourceKey(metricData)
+	if instanceID == "" {
+		return dimValue
+	}
+
+	return getAgentOriginValue(instanceID, dimValue)
 }
 
 func isContainsInStringArr(target string, array []string) bool {

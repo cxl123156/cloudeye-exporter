@@ -11,9 +11,15 @@ import (
 )
 
 func TestCCGetResourceInfo(t *testing.T) {
-	sysConfig := map[string][]string{CCConfigDimNames: {"network_incoming_bits_rate"}}
 	patches := getPatches()
-	patches.ApplyFuncReturn(getMetricConfigMap, sysConfig)
+	defer patches.Reset()
+	metricConf = map[string]MetricConf{
+		CCNamespace: {
+			DimMetricName: map[string][]string{
+				CCConfigDimNames: {"network_incoming_bits_rate"},
+			},
+		},
+	}
 	logs.InitLog("")
 	defaultEpId := "0"
 	id := "connection-0001"
@@ -42,7 +48,6 @@ func TestCCGetResourceInfo(t *testing.T) {
 	patches.ApplyMethodFunc(&ccClient, "ListBandwidthPackages", func(req *model.ListBandwidthPackagesRequest) (*model.ListBandwidthPackagesResponse, error) {
 		return &packagesPage, nil
 	})
-	defer patches.Reset()
 
 	localRegionId := "cn-test-01"
 	remoteRegionId := "cn-test-02"
@@ -55,7 +60,7 @@ func TestCCGetResourceInfo(t *testing.T) {
 				CloudConnectionId:  id,
 				BandwidthPackageId: id,
 				InterRegions: &[]model.InterRegion{
-					{LocalRegionId: &localRegionId, RemoteRegionId: &remoteRegionId},
+					{Id: id, LocalRegionId: &localRegionId, RemoteRegionId: &remoteRegionId},
 				}},
 		},
 		PageInfo: &model.PageInfo{},
@@ -63,12 +68,12 @@ func TestCCGetResourceInfo(t *testing.T) {
 	patches.ApplyMethodFunc(&ccClient, "ListInterRegionBandwidths", func(req *model.ListInterRegionBandwidthsRequest) (*model.ListInterRegionBandwidthsResponse, error) {
 		return &bandwidthsPage, nil
 	})
-	defer patches.Reset()
 
 	var ccgetter CCInfo
 	labels, metrics := ccgetter.GetResourceInfo()
 	assert.Equal(t, 1, len(labels))
 	assert.Equal(t, 1, len(metrics))
+	metricConf = map[string]MetricConf{}
 }
 
 func TestGetCCClient(t *testing.T) {

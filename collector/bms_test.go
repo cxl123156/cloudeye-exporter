@@ -14,7 +14,7 @@ func TestBmsGetResourceInfo(t *testing.T) {
 	}
 	patches := gomonkey.ApplyFuncReturn(getMetricConfigMap, sysConfig)
 	patches.ApplyFuncReturn(getAllServerFromRMS, instances, nil)
-	patches.ApplyFunc(loadAgentDimensions, func(_ string) { return })
+	patches.ApplyFunc(loadAgentDimensions, func(_ string) error { return nil })
 	patches.ApplyFuncReturn(getIPFromEcsInfo, "")
 	defer patches.Reset()
 

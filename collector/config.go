@@ -48,6 +48,9 @@ type Global struct {
 	HttpPort   int    `yaml:"proxy_port"`
 	UserName   string `yaml:"proxy_username"`
 	Password   string `yaml:"proxy_password"`
+
+	// CN列表，用于校验https证书链中的DNS名称
+	ClientCN string `yaml:"client_cn"`
 }
 
 type CloudConfig struct {
@@ -57,8 +60,12 @@ type CloudConfig struct {
 
 var CloudConf CloudConfig
 var SecurityMod bool
+var HttpsEnabled bool
+var ProxyEnabled bool
 var TmpAK string
 var TmpSK string
+var TmpProxyUserName string
+var TmpProxyPassword string
 
 func InitCloudConf(file string) error {
 	realPath, err := NormalizePath(file)
@@ -149,7 +156,11 @@ var metricConf map[string]MetricConf
 
 func InitMetricConf() error {
 	metricConf = make(map[string]MetricConf)
-	data, err := ioutil.ReadFile(CloudConf.Global.MetricsConfPath)
+	realPath, err := NormalizePath(CloudConf.Global.MetricsConfPath)
+	if err != nil {
+		return err
+	}
+	data, err := ioutil.ReadFile(realPath)
 	if err != nil {
 		return err
 	}

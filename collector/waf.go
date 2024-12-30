@@ -80,12 +80,12 @@ func getWAFClient() *waf.WafClient {
 
 func getAllPremiumWafInstances() []wafModel.ListInstance {
 	resp, err := getWAFClient().ListInstance(&wafModel.ListInstanceRequest{})
-	if resp.HttpStatusCode != http.StatusOK {
-		logs.Logger.Errorf("Get all premiumWafInstances HttpStatusCode is %d", resp.HttpStatusCode)
-		return nil
-	}
 	if err != nil {
 		logs.Logger.Errorf("Get all premiumWafInstances err, err is : %s", err.Error())
+		return nil
+	}
+	if resp.HttpStatusCode != http.StatusOK {
+		logs.Logger.Errorf("Get all premiumWafInstances HttpStatusCode is %d", resp.HttpStatusCode)
 		return nil
 	}
 	return *resp.Items

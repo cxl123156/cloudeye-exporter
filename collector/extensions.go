@@ -59,6 +59,7 @@ var (
 		"SYS.EG":            EgInfo{},
 		"SYS.OBS":           OBSInfo{},
 		"SYS.DNS":           DNSInfo{},
+		"SYS.EWP":           EWPInfo{},
 	}
 )
 

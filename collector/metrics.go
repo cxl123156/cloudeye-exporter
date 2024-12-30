@@ -75,10 +75,17 @@ func getCESClientV2() *cesv2.CesClient {
 		WithEndpoint(getEndpoint("ces", "v2")).Build())
 }
 
-func getAgentOriginValue(value string) string {
+func getAgentOriginValue(instanceID, value string) string {
 	originValue, ok := agentDimensions.Load(value)
 	if !ok {
-		return value
+		err := loadAgentDimensions(instanceID)
+		if err != nil {
+			logs.Logger.Errorf("Load agent dimension error: %s", err.Error())
+		}
+		originValue, ok = agentDimensions.Load(value)
+		if !ok {
+			return value
+		}
 	}
 
 	originV, ok := originValue.(string)
@@ -89,22 +96,23 @@ func getAgentOriginValue(value string) string {
 	return originV
 }
 
-func loadAgentDimensions(instanceID string) {
+func loadAgentDimensions(instanceID string) error {
 	dimName := cesv2model.GetListAgentDimensionInfoRequestDimNameEnum()
 	dimNames := []cesv2model.ListAgentDimensionInfoRequestDimName{dimName.DISK,
 		dimName.MOUNT_POINT, dimName.GPU, dimName.PROC, dimName.RAID}
 	for _, name := range dimNames {
 		request := &cesv2model.ListAgentDimensionInfoRequest{
-			InstanceId:  instanceID,
-			DimName:     name,
+			InstanceId: instanceID,
+			DimName:    name,
 		}
 		response, err := getCESClientV2().ListAgentDimensionInfo(request)
 		if err != nil {
-			logs.Logger.Errorf("Failed to list agentDimensions: %s", err.Error())
-			return
+			logs.Logger.Errorf("Failed to list agent dimensions: %s", err.Error())
+			return err
 		}
 		for _, dimension := range *response.Dimensions {
 			agentDimensions.Store(*dimension.Value, *dimension.OriginValue)
 		}
 	}
+	return nil
 }

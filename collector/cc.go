@@ -67,12 +67,6 @@ func buildResourceInfoAndMetrics(metricNames []string, connections map[string]mo
 		if bandwidth.CloudConnectionId == "" || bandwidth.BandwidthPackageId == "" {
 			continue
 		}
-		metrics := buildDimensionMetrics(metricNames, CCNamespace,
-			[]cesmodel.MetricsDimension{{Name: "cloud_connect_id", Value: bandwidth.CloudConnectionId},
-				{Name: "bwp_id", Value: bandwidth.BandwidthPackageId},
-				{Name: "region_bandwidth_id", Value: bandwidth.Id}})
-		filterMetrics = append(filterMetrics, metrics...)
-
 		var info labelInfo
 		connectionName, connectionValue := getConnectionInfo(connections, bandwidth.CloudConnectionId)
 		info.Name = append(info.Name, connectionName...)
@@ -82,13 +76,25 @@ func buildResourceInfoAndMetrics(metricNames []string, connections map[string]mo
 		info.Name = append(info.Name, pkgName...)
 		info.Value = append(info.Value, pkgValue...)
 
+		var regionBandWidthIds []string
 		if bandwidth.InterRegions != nil && len(*bandwidth.InterRegions) != 0 {
 			info.Name = append(info.Name, "interRegions", "bandwidthName")
 			info.Value = append(info.Value, fmt.Sprintf("%s<->%s",
 				getDefaultString((*bandwidth.InterRegions)[0].LocalRegionId), getDefaultString((*bandwidth.InterRegions)[0].RemoteRegionId)),
 				getDefaultString(&bandwidth.Name))
+			for _, interRegion := range *bandwidth.InterRegions {
+				regionBandWidthIds = append(regionBandWidthIds, interRegion.Id)
+			}
 		}
-		resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = info
+
+		for _, regionBandWidthId := range regionBandWidthIds {
+			metrics := buildDimensionMetrics(metricNames, CCNamespace,
+				[]cesmodel.MetricsDimension{{Name: "cloud_connect_id", Value: bandwidth.CloudConnectionId},
+					{Name: "bwp_id", Value: bandwidth.BandwidthPackageId},
+					{Name: "region_bandwidth_id", Value: regionBandWidthId}})
+			filterMetrics = append(filterMetrics, metrics...)
+			resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = info
+		}
 	}
 	return resourceInfos, filterMetrics
 }

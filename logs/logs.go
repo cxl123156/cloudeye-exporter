@@ -1,9 +1,12 @@
 package logs
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 
@@ -78,8 +81,13 @@ func (c ConfLoader) LoadData(data []byte, cfg interface{}) error {
 }
 
 func InitLog(logsConfPath string) {
+	realPath, pathErr := NormalizePath(logsConfPath)
+	if pathErr != nil {
+		fmt.Printf("Normalize endpoint config err: %s", pathErr.Error())
+		return
+	}
 	var cfg map[string][]Config
-	err := newYamlLoader().LoadFile(logsConfPath, &cfg)
+	err := newYamlLoader().LoadFile(realPath, &cfg)
 	if err != nil {
 		fmt.Printf("Fail to load logs.yml, error: %s", err.Error())
 		return
@@ -217,4 +225,17 @@ func makeZapLogger(cfg []Config) *zap.Logger {
 		cores = append(cores, makeZapCore(&cfg[i]))
 	}
 	return zap.New(zapcore.NewTee(cores...), zap.AddCaller())
+}
+
+func NormalizePath(path string) (string, error) {
+	relPath, err := filepath.Abs(path) // 对文件路径进行标准化
+	if err != nil {
+		return "", err
+	}
+	relPath = strings.Replace(relPath, "\\", "/", -1)
+	match, err := regexp.MatchString("[!;<>&|$\n`\\\\]", relPath)
+	if match || err != nil {
+		return "", errors.New("match path error")
+	}
+	return relPath, nil
 }

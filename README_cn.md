@@ -60,6 +60,7 @@ Prometheus是用于展示大型测量数据的开源可视化工具，在工业�
 |事件网格|SYS.EG|√|RMS|
 |对象存储服务|SYS.OBS|√|RMS|
 |云解析服务|SYS.DNS|√|云服务|
+|企业门户|SYS.EWP|√|云服务|
 
 注：自定义标签时，key只能包含大写字母、小写字母以及中划线
 
@@ -98,6 +99,7 @@ global:
   metrics_conf_path: "/root/metric.yml" # 可选配置，指定指标配置文件路径，建议使用绝对路径。若未指定，程序将默认使用执行启动命令所在目录下的指标配置文件。
   endpoints_conf_path: "/root/endpoints.yml" # 可选配置，指定服务域名配置文件路径，建议使用绝对路径。若未指定，程序将默认使用执行启动命令所在目录下的服务域名配置文件。
   ignore_ssl_verify: false # 可选配置，exporter查询资源/指标时默认校验ssl证书；若用户因ssl证书校验导致功能异常，可将该配置项配置为true跳过ssl证书校验
+  client_cn: "" # 可选配置，指定被信任的DNS列表，用于校验https证书链中的DNS名称，列表中多个DNS名称请以逗号分隔
   
   # 可选配置，根据实际情况替换示例中的代理协议、地址和端口号
   proxy_schema: "http"                      
@@ -131,19 +133,106 @@ auth:
 ./cloudeye-exporter -config=clouds.yml
 ```
 
-4.1 出于安全考虑cloudeye-exporter提供了 -s参数, 可以通过命令行交互的方式输入ak sk避免明文配置在clouds.yml文件中引起泄露
+4.1 出于安全考虑cloudeye-exporter提供了-s参数, 可以通过命令行交互的方式输入ak sk避免明文配置在clouds.yml文件中引起泄露。
 ```shell
 ./cloudeye-exporter -s true
 ```
-下面是shell脚本启动的样例，建议在脚本中配置加密后的ak&sk，并通过您自己的解密方法对ak sk进行解密后通过huaweiCloud_AK和huaweiCloud_SK参数传入cloudeye-exporter
+下面是shell脚本启动的样例，建议在脚本中配置加密后的ak&sk，并通过您自己的解密方法对ak sk进行解密后通过huaweiCloud_AK和huaweiCloud_SK参数传入cloudeye-exporter。
 ```shell
 #!/bin/bash
 ## 为了防止您的ak&sk泄露，不建议在脚本中配置明文的ak sk
 huaweiCloud_AK=your_decrypt_function("加密的AK")
 huaweiCloud_SK=your_decrypt_function("加密的SK")
-$(./cloudeye-exporter -s true<<EOF
+./cloudeye-exporter -s true<<EOF
 $huaweiCloud_AK $huaweiCloud_SK
-EOF)
+EOF
+```
+4.2 出于安全考虑，cloudeye-exporter提供了-k参数，该参数代表以https协议（双向认证）启动本服务；启动前请确保操作系统已安装openssl，启动时需要通过命令行交互方式输入CA证书路径、服务端https证书路径、服务端https私钥路径以及私钥密码（建议客户使用自己公司购买的通过权威认证的CA证书制作双向证书，也支持自签名证书）。
+```shell
+./cloudeye-exporter -k true
+```
+下面是shell脚本启动的样例，建议在脚本中配置加密后的CA证书、服务端https证书、私钥以及私钥密码信息，以参数形式传入cloudeye-exporter，避免明文泄露
+```shell
+#!/bin/bash
+huaweiCloud_https_ca=your_decrypt_function("加密的CA证书")
+huaweiCloud_https_crt=your_decrypt_function("加密的https证书")
+huaweiCloud_https_key=your_decrypt_function("加密的https私钥")
+huaweiCloud_https_password=your_decrypt_function("加密的https私钥密码")
+root_path="/opt/cloud/cloudeye-exporter/root_crt"
+server_crt_path="/opt/cloud/cloudeye-exporter/server_crt"
+server_key_path="/opt/cloud/cloudeye-exporter/server_key"
+# CA证书写入CA临时文件，exporter读取完毕后会自动删除
+cat > $root_path << EOF
+$huaweiCloud_https_ca
+EOF
+# https证书写入证书临时文件，exporter读取完毕后会自动删除
+cat > $server_crt_path << EOF
+$huaweiCloud_https_crt
+EOF
+# 私钥写入私钥临时文件，exporter读取完毕后会自动删除
+cat > $server_key_path << EOF
+$huaweiCloud_https_key
+EOF
+# 请不要将原始证书路径和私钥路径作为exporter启动参数，以免被exporter删除
+./cloudeye-exporter -k true<<EOF
+$root_path $server_crt_path $server_key_path $huaweiCloud_https_password
+EOF
+```
+4.3 出于安全考虑cloudeye-exporter提供了-p参数, 可以通过命令行交互的方式输入代理的userName和password，避免明文配置在clouds.yml文件中引起泄露。
+```shell
+./cloudeye-exporter -p true
+```
+下面是shell脚本启动的样例，建议在脚本中配置proxyUserName和加密后的proxyPassword，并通过您自己的解密方法对proxyPassword
+进行解密，将proxyUserName和解密后的proxyPassword以参数方式传入cloudeye-exporter。
+```shell
+#!/bin/bash
+## 为了防止您的代理泄露，不建议在脚本中配置明文的proxyPassword
+huaweiCloud_ProxyUserName="你的userName"
+huaweiCloud_ProxyPassword=your_decrypt_function("加密的proxyPassword")
+./cloudeye-exporter -p true<<EOF
+$huaweiCloud_ProxyUserName $huaweiCloud_ProxyPassword
+EOF
+```
+
+4.4 在多参数场景下，即ak/sk、proxy信息和https信息都需要通过命令行参数传入，则顺序为-s -p -k。
+下面是shell脚本启动的样例，建议在脚本中配置加密后的ak、sk、proxyPassword和CA证书、
+服务端https证书、私钥以及私钥密码信息以及proxyUserName信息，并分别以huaweiCloud_AK、huaweiCloud_SK、huaweiCloud_ProxyUserName、
+huaweiCloud_ProxyPassword、root_path、server_crt_path、server_key_path、
+huaweiCloud_https_password参数传入cloudeye-exporter。
+```shell
+#!/bin/bash
+huaweiCloud_AK=your_decrypt_function("加密的AK")
+huaweiCloud_SK=your_decrypt_function("加密的SK")
+
+huaweiCloud_ProxyUserName="你的userName"
+huaweiCloud_ProxyPassword=your_decrypt_function("加密的proxyPassword")
+
+huaweiCloud_https_ca=your_decrypt_function("加密的CA证书")
+huaweiCloud_https_crt=your_decrypt_function("加密的https证书")
+huaweiCloud_https_key=your_decrypt_function("加密的https私钥")
+huaweiCloud_https_password=your_decrypt_function("加密的https私钥密码")
+
+root_path="/opt/cloud/cloudeye-exporter/root_crt"
+server_crt_path="/opt/cloud/cloudeye-exporter/server_crt"
+server_key_path="/opt/cloud/cloudeye-exporter/server_key"
+
+# CA证书写入CA临时文件，exporter读取完毕后会自动删除
+cat > $root_path << EOF
+$huaweiCloud_https_ca
+EOF
+# https证书写入证书临时文件，exporter读取完毕后会自动删除
+cat > $server_crt_path << EOF
+$huaweiCloud_https_crt
+EOF
+# 私钥写入私钥临时文件，exporter读取完毕后会自动删除
+cat > $server_key_path << EOF
+$huaweiCloud_https_key
+EOF
+./cloudeye-exporter -s=true -p=true -k=true<<EOF
+$huaweiCloud_AK $huaweiCloud_SK
+$huaweiCloud_ProxyUserName $huaweiCloud_ProxyPassword
+$root_path $server_crt_path $server_key_path $huaweiCloud_https_password
+EOF
 ```
 
 5. 指标配置
@@ -158,9 +247,9 @@ $ wget https://github.com/prometheus/prometheus/releases/download/v2.14.0/promet
 $ tar xzf prometheus-2.14.0.linux-amd64.tar.gz
 $ cd prometheus-2.14.0.linux-amd64
 ```
-2. 配置接入cloudeye exporter结点
+2. 配置接入cloudeye exporter节点
 
-   修改prometheus中的prometheus.yml文件配置。如下配置所示在scrape_configs下新增job_name名为’huaweicloud’的结点。其中targets中配置的是访问cloudeye-exporter服务的ip地址和端口号，services配置的是你想要监控的服务，比如SYS.VPC,SYS.RDS。
+   修改prometheus中的prometheus.yml文件配置。如下配置所示在scrape_configs下新增job_name名为’huaweicloud’的节点。其中targets中配置的是访问cloudeye-exporter服务的ip地址和端口号，services配置的是你想要监控的服务，比如SYS.VPC,SYS.RDS。
    ```
    $ vi prometheus.yml
    global:
@@ -168,6 +257,11 @@ $ cd prometheus-2.14.0.linux-amd64
      scrape_timeout: 1m # 设置从exporter查询数据的超时时间，prometheus配置文件中默认为15s，建议设置为1m
    scrape_configs:
      - job_name: 'huaweicloud'
+       scheme: https # 默认该值为http，代表prometheus以http方式调用cloudeye-exporter；如需以https方式调用，请将配置值改为https
+       tls_config:   # prometheus以https调用cloudeye-exporter服务时，该参数必配
+         ca_file: root.crt     # 客户端CA证书的路径
+         cert_file: client.crt # 客户端https证书的路径
+         key_file: client.key  # 客户端私钥的路径
        static_configs:
        - targets: ['192.168.0.xx:8087'] # exporter节点地址:监听端口
        params:

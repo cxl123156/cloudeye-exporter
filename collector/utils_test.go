@@ -296,3 +296,35 @@ func TestDimNameEquals(t *testing.T) {
 	sortedDimName = "city"
 	assert.False(t, DimNameEquals(dimName, sortedDimName))
 }
+
+func TestStrSliceContains(t *testing.T) {
+	testCases := []struct {
+		name   string
+		str    string
+		slice  []string
+		expect func(t *testing.T, result bool)
+	}{
+		{
+			"return_true",
+			"aaa",
+			[]string{"aaa", "bbb"},
+			func(t *testing.T, result bool) {
+				assert.True(t, result)
+			},
+		},
+		{
+			"return_false",
+			"aaa",
+			[]string{"bbb", "ccc"},
+			func(t *testing.T, result bool) {
+				assert.False(t, result)
+			},
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			result := strSliceContains(testCase.slice, testCase.str)
+			testCase.expect(t, result)
+		})
+	}
+}

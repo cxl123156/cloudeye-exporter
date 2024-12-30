@@ -15,6 +15,7 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/def"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/impl"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/sdkerr"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 	iam "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
 
@@ -299,4 +300,21 @@ func GetIAMClient() *iam.IamClient {
 					Build()).
 			WithHttpConfig(GetHttpConfig().WithIgnoreSSLVerification(CloudConf.Global.IgnoreSSLVerify)).
 			Build())
+}
+
+func strSliceContains(ss []string, s string) bool {
+	for _, v := range ss {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+func isErrorTypeForTooManyRequests(err error) bool {
+	serviceRespError, ok := err.(*sdkerr.ServiceResponseError)
+	if ok {
+		return serviceRespError.StatusCode == TooManyRequestsErrorCode
+	}
+	return false
 }

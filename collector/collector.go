@@ -199,6 +199,9 @@ func getDimLabel(metric model.BatchMetricData) labelInfo {
 	if *metric.Namespace == "AGT.ECS" {
 		getEvsInfoForECS(metric, &label)
 	}
+	if *metric.Namespace == "SERVICE.BMS" {
+		getEvsInfoForBMS(metric, &label)
+	}
 	return label
 }
 
@@ -372,11 +375,18 @@ func isMetricLabelConflict(fqName string, label labelInfo, metricMap *Prometheus
 }
 
 func getEvsInfoForECS(metric model.BatchMetricData, label *labelInfo) {
+	getEvsInfo(metric, label, &ecsInfo)
+}
+
+func getEvsInfoForBMS(metric model.BatchMetricData, label *labelInfo) {
+	getEvsInfo(metric, label, &bmsInfo)
+}
+
+func getEvsInfo(metric model.BatchMetricData, label *labelInfo, serverInfo *serversInfo) {
 	instanceID := ""
 	diskName := ""
 
 	for _, dim := range *metric.Dimensions {
-
 		if dim.Name == "instance_id" {
 			instanceID = dim.Value
 		}
@@ -389,7 +399,7 @@ func getEvsInfoForECS(metric model.BatchMetricData, label *labelInfo) {
 		return
 	}
 
-	extendInfoMap, ok := ecsInfo.ExtendInfo[instanceID]
+	extendInfoMap, ok := serverInfo.ExtendInfo[instanceID]
 	if !ok {
 		logs.Logger.Warnf("Evs info not found, instanceID is %s", instanceID)
 		return

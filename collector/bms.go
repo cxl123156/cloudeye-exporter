@@ -3,7 +3,7 @@ package collector
 import (
 	"time"
 
-	cesmodel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ces/v1/model"
 
 	"github.com/huaweicloud/cloudeye-exporter/logs"
 )
@@ -12,9 +12,10 @@ var bmsInfo serversInfo
 
 type BMSInfo struct{}
 
-func (getter BMSInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.MetricInfoList) {
+func (getter BMSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInfoList) {
 	resourceInfos := map[string]labelInfo{}
-	filterMetrics := make([]cesmodel.MetricInfoList, 0)
+	filterMetrics := make([]model.MetricInfoList, 0)
+	extendInfo := make(map[string]map[string]string)
 	bmsInfo.Lock()
 	defer bmsInfo.Unlock()
 	if bmsInfo.LabelInfo == nil || time.Now().Unix() > bmsInfo.TTL {
@@ -36,10 +37,16 @@ func (getter BMSInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.Metric
 				info.Name = append(info.Name, keys...)
 				info.Value = append(info.Value, values...)
 				resourceInfos[GetResourceKeyFromMetricInfo(metrics[0])] = info
+				extendInfo[instance.ID] = instance.DiskMap
 			}
 		}
 		bmsInfo.LabelInfo = resourceInfos
 		bmsInfo.FilterMetrics = filterMetrics
+		tmpMap := make(map[string]interface{})
+		for key, value := range extendInfo {
+			tmpMap[key] = value
+		}
+		bmsInfo.ExtendInfo = tmpMap
 		bmsInfo.TTL = time.Now().Add(GetResourceInfoExpirationTime()).Unix()
 	}
 	return bmsInfo.LabelInfo, bmsInfo.FilterMetrics
@@ -49,7 +56,7 @@ type SERVICEBMSInfo struct{}
 
 var serviceBmsInfo serversInfo
 
-func (getter SERVICEBMSInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel.MetricInfoList) {
+func (getter SERVICEBMSInfo) GetResourceInfo() (map[string]labelInfo, []model.MetricInfoList) {
 	serviceBmsInfo.Lock()
 	defer serviceBmsInfo.Unlock()
 	if serviceBmsInfo.LabelInfo == nil || time.Now().Unix() > serviceBmsInfo.TTL {
@@ -60,9 +67,9 @@ func (getter SERVICEBMSInfo) GetResourceInfo() (map[string]labelInfo, []cesmodel
 	return serviceBmsInfo.LabelInfo, serviceBmsInfo.FilterMetrics
 }
 
-func getServiceBMSMetrics() []cesmodel.MetricInfoList {
+func getServiceBMSMetrics() []model.MetricInfoList {
 	allMetrics, err := listAllMetrics("SERVICE.BMS")
-	var filteredMetrics []cesmodel.MetricInfoList
+	var filteredMetrics []model.MetricInfoList
 	if err != nil {
 		logs.Logger.Errorf("Get all metrics of SERVICE.BMS error: %s", err.Error())
 		return filteredMetrics
